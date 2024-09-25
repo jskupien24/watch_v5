@@ -50,9 +50,7 @@ would allow for automation of the tricky/boring parts.
 
 ## Assumptions and Dependencies:
 \[TBD\]
-&nbsp;
-
-&nbsp;
+## &nbsp;
 
 #### Developed by:
 * Jack Skupien
