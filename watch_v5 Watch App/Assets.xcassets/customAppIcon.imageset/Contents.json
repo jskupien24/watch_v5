@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "Van_Halen_-_Diver_Down.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "DiverDown.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
