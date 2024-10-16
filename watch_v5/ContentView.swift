@@ -11,7 +11,7 @@ struct ContentView: View {
     var body: some View {
         VStack {//vertical stack container
             //add globe image
-            Image("customImage")
+            Image("flag")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200)

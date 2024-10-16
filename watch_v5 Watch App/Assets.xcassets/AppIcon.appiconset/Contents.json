@@ -1,12 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "DiverDown.png",
-      "idiom" : "universal",
-      "platform" : "watchos",
-      "size" : "1024x1024"
-    },
-    {
+      "filename" : "logo-4.png",
       "idiom" : "universal",
       "platform" : "watchos",
       "size" : "1024x1024"
