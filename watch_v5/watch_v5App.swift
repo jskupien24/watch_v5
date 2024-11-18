@@ -11,7 +11,7 @@ import SwiftUI
 struct watch_v5App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WelcomeScreen()
         }
     }
 }
