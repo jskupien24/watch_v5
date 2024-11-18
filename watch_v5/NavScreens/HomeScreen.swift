@@ -7,17 +7,14 @@
 
 import SwiftUI
 
-struct WelcomeScreen: View {
+struct HomeScreen: View {
     var body: some View {
         VStack {//vertical stack container
-            //add globe image
+            //add dd flag image
             Image("flag")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200)
-//                .frame(width: 100.0, height: 100.0)
-//                .resizable()
-                //.imageScale(.large)
                 .foregroundStyle(.tint)
             //add text
             Text("Hello, Diver!")
@@ -25,10 +22,9 @@ struct WelcomeScreen: View {
                 .font(.system(size: 32))
                 .frame(width: 200)
         }
-        .padding()
     }
 }
 
 #Preview {
-    WelcomeScreen()
+    HomeScreen()
 }
