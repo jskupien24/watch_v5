@@ -1,8 +1,8 @@
 //
-//  ContentView.swift
+//  LoadingScreen.swift
 //  watch_v5
 //
-//  Created by Jack Skupien on 9/20/24.
+//  Created by Jack Skupien on 2/3/25.
 //
 
 import SwiftUI

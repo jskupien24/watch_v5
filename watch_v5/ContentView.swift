@@ -7,28 +7,109 @@
 
 import SwiftUI
 
-struct NavBar: View {
+struct ContentView: View {
     var body: some View {
-        TabView{
-            HomeScreen()
-                .tabItem(){
-                    Image(systemName:"house.fill")
-                    Text("Home")
+        TabView {
+            HomeView()
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
                 }
-            Dives()
-                .tabItem(){
-                    Image(systemName:"water.waves").symbolEffect(.breathe.pulse.byLayer, options: .nonRepeating)
-                    Text("Dives")
+            
+            MyDivesView()
+                .tabItem {
+                    Label("My Dives", systemImage: "water.waves").symbolEffect(.breathe.pulse.byLayer/*, options: .nonRepeating*/)
                 }
-            Profile()
-                .tabItem(){
-                    Image(systemName:"person.fill")
-                    Text("Profile")
+            
+            ProfileView()
+                .tabItem {
+                    Label("Profile", systemImage: "person.fill")
                 }
         }
     }
 }
 
-#Preview {
-    NavBar()
+// HomeView.swift
+struct HomeView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Home")
+                    .font(.largeTitle)
+                    .padding()
+                
+                Spacer()
+            }
+            .navigationTitle("Home")
+        }
+    }
 }
+
+// MyDivesView.swift
+struct MyDivesView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("My Dives")
+                    .font(.largeTitle)
+                    .padding()
+                
+                Spacer()
+            }
+            .navigationTitle("My Dives")
+        }
+    }
+}
+
+// ProfileView.swift
+struct ProfileView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Profile")
+                    .font(.largeTitle)
+                    .padding()
+                
+                Spacer()
+            }
+            .navigationTitle("Profile")
+        }
+    }
+}
+
+// Preview provider
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
+//import SwiftUI
+//
+//struct NavBar: View {
+//    var body: some View {
+//        TabView{
+//            HomeScreen()
+//                .tabItem(){
+//                    Image(systemName:"house.fill")
+//                    Text("Home")
+//                }
+//            Dives()
+//                .tabItem(){
+//                    Image(systemName:"water.waves").symbolEffect(.breathe.pulse.byLayer, options: .nonRepeating)
+//                    Text("Dives")
+//                }
+//            Profile()
+//                .tabItem(){
+//                    Image(systemName:"person.fill")
+//                    Text("Profile")
+//                }
+//        }
+//        VStack{
+//            
+//        }
+//    }
+//}
+
+//#Preview {
+//    NavBar()
+//}
