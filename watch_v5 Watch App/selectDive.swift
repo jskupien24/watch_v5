@@ -16,6 +16,42 @@ var dives = [Dive(name: "Planned Dives"),
              Dive(name: "Snorkle"),
              Dive(name:"Free Dive")]
 
+struct FadeView: View {
+    @State private var showSplash = true
+
+    var body: some View {
+        ZStack {
+            if showSplash {
+                SplashView(showSplash: $showSplash)
+            } else {
+                selectDive()
+            }
+        }
+    }
+}
+
+struct SplashView: View {
+    @Binding var showSplash: Bool
+    @State private var opacity = 2.0
+
+    var body: some View {
+        Text("Hello, Diver")
+            .font(.largeTitle)
+            .fontWeight(.bold)
+            .opacity(opacity)
+            .onAppear {
+                withAnimation(.easeOut(duration: 2.0)) {
+                    opacity = 0
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    withAnimation {
+                        showSplash = false
+                    }
+                }
+            }
+    }
+}
+
 struct selectDive: View{
     var body: some View{
         NavigationStack{
@@ -45,9 +81,9 @@ struct selectDive: View{
         }
     }
 }
-    struct selectDive_Previews: PreviewProvider {
+    struct FadeView_Previews: PreviewProvider {
         static var previews: some View {
-            selectDive()
+            FadeView()
         }
     }
 
