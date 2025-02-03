@@ -17,6 +17,8 @@ struct ContentView: View {
                 HomeView()
             } else if selectedTab == 1 {
                 MyDivesView()
+            } else if selectedTab == 2 {
+                DiveFeed()
             } else {
                 ProfileView()
             }
@@ -24,11 +26,13 @@ struct ContentView: View {
             //show tab bar at bottom
             HStack {
                 TabButton(title: "Home", icon: "house.fill", index: 0, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 50, leading: 10, bottom:0, trailing: 40))
+                    .padding(EdgeInsets(top: 50, leading: 10, bottom:0, trailing: 20))
                 TabButton(title: "My Dives", icon: "water.waves", index: 1, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 50, leading: 40, bottom:0, trailing: 40))
-                TabButton(title: "Profile", icon: "person.fill", index: 2, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 50, leading: 40, bottom:0, trailing: 10))
+                    .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 20))
+                TabButton(title: "Feed", icon: "list.number", index: 2, selectedTab: $selectedTab)
+                    .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 20))
+                TabButton(title: "Profile", icon: "person.fill", index: 3, selectedTab: $selectedTab)
+                    .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 10))
             }
             .background(Color.white)
         }
