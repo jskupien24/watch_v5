@@ -8,60 +8,89 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedTab = 0
+
     var body: some View {
-        TabView {//nav menu at the bottom
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
-                }
+        VStack {
+            // Your main content views
+            if selectedTab == 0 {
+                HomeView()
+            } else if selectedTab == 1 {
+                MyDivesView()
+            } else {
+                ProfileView()
+            }
             
-            MyDivesView()
-                .tabItem {
-                    Label("My Dives", systemImage: "water.waves").symbolEffect(.breathe.pulse.byLayer/*, options: .nonRepeating*/)
-                }
-            
-            ProfileView()
-                .tabItem {
-                    Label("Profile", systemImage: "person.fill")
-                }
+            // Custom Tab Bar
+            HStack {
+                TabButton(title: "Home", icon: "house.fill", index: 0, selectedTab: $selectedTab)
+                    .padding(EdgeInsets(top: 40, leading: 10, bottom:0, trailing: 40))
+                TabButton(title: "My Dives", icon: "water.waves", index: 1, selectedTab: $selectedTab)
+                    .padding(EdgeInsets(top: 40, leading: 40, bottom:0, trailing: 40))
+                TabButton(title: "Profile", icon: "person.fill", index: 2, selectedTab: $selectedTab)
+                    .padding(EdgeInsets(top: 50, leading: 40, bottom:0, trailing: 10))
+            }
+            .background(Color.white)
         }
     }
 }
 
-// Preview provider
+struct TabButton: View {
+    var title: String
+    var icon: String
+    var index: Int
+    @Binding var selectedTab: Int
+    
+    @State private var pulse = false
+    
+    var body: some View {
+        Button(action: {
+            selectedTab = index
+            pulse.toggle()
+        }) {
+            VStack {
+                Image(systemName: icon)
+                    .font(.system(size: 24))
+                    .foregroundColor(selectedTab == index ? .accentColor : .gray)
+                    .symbolEffect(.bounce, options: .nonRepeating, value: pulse)
+                    .scaleEffect(pulse ? 1.2 : 1.0)
+                    .animation(.easeInOut(duration: 0.3), value: pulse)
+                
+                Text(title)
+                    .font(.caption)
+                    .foregroundColor(selectedTab == index ? .accentColor : .gray)
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+//preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
 
-//import SwiftUI
-//
-//struct NavBar: View {
+//old, basic menu bar below
+//struct ContentView: View {
 //    var body: some View {
-//        TabView{
-//            HomeScreen()
-//                .tabItem(){
-//                    Image(systemName:"house.fill")
-//                    Text("Home")
+//        TabView {//nav menu at the bottom
+//            HomeView()
+//                .tabItem {
+//                    Label("Home", systemImage: "house.fill")
 //                }
-//            Dives()
-//                .tabItem(){
-//                    Image(systemName:"water.waves").symbolEffect(.breathe.pulse.byLayer, options: .nonRepeating)
-//                    Text("Dives")
+//
+//            MyDivesView()
+//                .tabItem {
+//                    Label("My Dives", systemImage: "water.waves")
+//                        .symbolEffect(.breathe.pulse.byLayer, options: .nonRepeating)
 //                }
-//            Profile()
-//                .tabItem(){
-//                    Image(systemName:"person.fill")
-//                    Text("Profile")
+//
+//            ProfileView()
+//                .tabItem {
+//                    Label("Profile", systemImage: "person.fill")
 //                }
-//        }
-//        VStack{
-//            
 //        }
 //    }
-//}
-
-//#Preview {
-//    NavBar()
 //}
