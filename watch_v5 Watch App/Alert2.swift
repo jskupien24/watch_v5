@@ -1,3 +1,10 @@
+//
+//  Alert2.swift
+//  watch_v5
+//
+//  Created by Faith Hunter on 10/29/24.
+//
+
 import SwiftUI
 
 struct OffCourseAlertView: View {

@@ -4,6 +4,8 @@
 //
 //  Created by Jack Skupien on 9/20/24.
 //
+// Edited by Faith Chernowski on 2/3/2025
+// added feed page to the nav bar
 
 import SwiftUI
 

@@ -1,6 +1,12 @@
+//
+//  metrics.swift
+//  watch_v5
+//
+//  Created by Faith Chernowski on 10/29/24.
+//
 import SwiftUI
 
-struct EssentialDiveMetricsView: View {
+struct DiveMetricsView: View {
     @State private var depth = "72 ft"
     @State private var waterTemp = "82°F"
     @State private var heartRate = "76 BPM"
@@ -40,4 +46,8 @@ struct EssentialDiveMetricsView: View {
         }
         .padding()
     }
+}
+
+#Preview {
+    DiveMetricsView()
 }
