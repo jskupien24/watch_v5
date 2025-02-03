@@ -12,7 +12,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            // Your main content views
+            //assign tabs
             if selectedTab == 0 {
                 HomeView()
             } else if selectedTab == 1 {
@@ -21,12 +21,12 @@ struct ContentView: View {
                 ProfileView()
             }
             
-            // Custom Tab Bar
+            //show tab bar at bottom
             HStack {
                 TabButton(title: "Home", icon: "house.fill", index: 0, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 40, leading: 10, bottom:0, trailing: 40))
+                    .padding(EdgeInsets(top: 50, leading: 10, bottom:0, trailing: 40))
                 TabButton(title: "My Dives", icon: "water.waves", index: 1, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 40, leading: 40, bottom:0, trailing: 40))
+                    .padding(EdgeInsets(top: 50, leading: 40, bottom:0, trailing: 40))
                 TabButton(title: "Profile", icon: "person.fill", index: 2, selectedTab: $selectedTab)
                     .padding(EdgeInsets(top: 50, leading: 40, bottom:0, trailing: 10))
             }

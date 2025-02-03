@@ -40,7 +40,7 @@ struct ProfileView: View {
                 Text("[Profile Content Placeholder]").foregroundColor(.accentColor)
                 Spacer()
             }
-            .navigationTitle("Profile")
+            .navigationTitle("My Profile")
         }
     }
 }
