@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TabView {
+        TabView {//nav menu at the bottom
             HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house.fill")
@@ -24,54 +24,6 @@ struct ContentView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person.fill")
                 }
-        }
-    }
-}
-
-// HomeView.swift
-struct HomeView: View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("Home")
-                    .font(.largeTitle)
-                    .padding()
-                
-                Spacer()
-            }
-            .navigationTitle("Home")
-        }
-    }
-}
-
-// MyDivesView.swift
-struct MyDivesView: View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("My Dives")
-                    .font(.largeTitle)
-                    .padding()
-                
-                Spacer()
-            }
-            .navigationTitle("My Dives")
-        }
-    }
-}
-
-// ProfileView.swift
-struct ProfileView: View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("Profile")
-                    .font(.largeTitle)
-                    .padding()
-                
-                Spacer()
-            }
-            .navigationTitle("Profile")
         }
     }
 }

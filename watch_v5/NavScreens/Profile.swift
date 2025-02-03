@@ -7,12 +7,25 @@
 
 import SwiftUI
 
-struct Profile: View {
+// ProfileView.swift
+struct ProfileView: View {
     var body: some View {
-        Text("My Profile")
+        NavigationView {
+            VStack {
+//                Text("")
+//                    .font(.largeTitle)
+//                    .padding()
+                
+                //add profile picture
+                Image("ProfilePicture")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .foregroundStyle(.tint)
+                
+                Spacer()
+            }
+            .navigationTitle("Profile")
+        }
     }
-}
-
-#Preview {
-    Profile()
 }

@@ -14,7 +14,7 @@ struct HomeScreen: View {
             Image("flag")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 200, height: 200)
+                .frame(width: 150, height: 150)
                 .foregroundStyle(.tint)
             //add text
             Text("Hello, Diver!")
