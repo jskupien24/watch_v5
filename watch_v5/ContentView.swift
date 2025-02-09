@@ -16,7 +16,7 @@ struct ContentView: View {
         VStack {
             //assign tabs
             if selectedTab == 0 {
-                HomeView()
+                DiveSiteFeedView()
             } else if selectedTab == 1 {
                 MyDivesView()
             } else if selectedTab == 2 {
