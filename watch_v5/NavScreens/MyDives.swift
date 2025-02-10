@@ -13,7 +13,7 @@ struct Dive: Identifiable {
     let date: Date
     let location: String
     let p_depth: Int
-    let p_diveTime: Int
+    let p_diveTime: Double
     let p_pctOxygen: Int
     let p_dcModel: NewDiveView.Model
     let bottomTime: Int
@@ -52,6 +52,7 @@ struct NewDiveView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var dives: [Dive]
     @State private var isEditing = false //changes color of slider value when editing
+    @State private var isDiveTimeEditing = false //allows you to edit dive time in other menus
     
     // Form fields
     
@@ -61,12 +62,12 @@ struct NewDiveView: View {
     
     //o
     @State private var p_depth = 0
-    @State private var p_diveTime = 0 //Make this a time
+    @State private var p_diveTime = 0.0 //Make this a time
     @State private var p_pctOxygen = 0 //Make this a pct
     
     //d
     enum Model: String, CaseIterable, Identifiable {
-        case Naui, Other
+        case Naui, PADI
         var id: Self { self }
     }
     @State private var p_dcModel: Model = .Naui
@@ -117,15 +118,28 @@ struct NewDiveView: View {
                     case .decompression:
                         Picker("Decompression Model", selection: $p_dcModel){
                             Text("NAUI").tag(Model.Naui)
-                            Text("PADI").tag(Model.Other)
+                            Text("PADI").tag(Model.PADI)
                         }
                         //Show Dive Table
-                        Image("DiveTableNAUI")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 350, height: 350)
-                            .foregroundStyle(.tint)
-//                            .padding(EdgeInsets(top: 10, leading: 10, bottom:10, trailing: 5))
+                        HStack{
+                            Spacer()
+                            if p_dcModel == Model.Naui {
+                                Image("DiveTableNAUI")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 300, height: 300)
+                                    .foregroundStyle(.tint)
+                                //                            .padding(EdgeInsets(top: 10, leading: 10, bottom:10, trailing: 5))
+                            } else {
+                                Image("DiveTablePADI")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 300, height: 207)
+                                    .foregroundStyle(.tint)
+                                //                            .padding(EdgeInsets(top: 10, leading: 10, bottom:10, trailing: 5))
+                            }
+                            Spacer()
+                        }
                         
                     //Inert Gas Narcosis
                     case .inert:
@@ -143,17 +157,43 @@ struct NewDiveView: View {
                         
                     //Thermal
                     case .thermal:
-                        Slider(value: $p_startPressure, in: 33...100, step: 1,
-                               onEditingChanged: { editing in
-                                    isEditing = editing
+                        // Temperature Slider
+                        VStack(alignment: .leading) {
+                            Slider(value: $p_temp, in: 33...100, step: 1,
+                                   onEditingChanged: { editing in
+                                isEditing = editing
+                            })
+                            Text("Expected Temperature: \(Int(p_temp))ºF")
+                                .foregroundColor(isEditing ? .accentColor : .black)
+                        }
+                        //Dive Time Slider
+                        VStack(alignment: .leading) {
+                            if isDiveTimeEditing {
+                                Slider(value: $p_diveTime, in: 0...120, step: 1,
+                                       onEditingChanged: { editing in
+                                    isDiveTimeEditing = true
                                 }
-                        )
-                        Text("Expected Temperature: \(Int(p_startPressure))ºF")
-                            .foregroundColor(isEditing ? .accentColor : .black)//changed from gray
+                                )
+                                Text("Dive Time: \(Int(p_diveTime)) min")
+                                    .foregroundColor(isDiveTimeEditing ? .black : .black)
+                            }else{
+                                Text("Dive Time: **\(Int(p_diveTime)) minutes** (Click to Edit)")
+                                    .foregroundColor(isDiveTimeEditing ? .accentColor : .black)
+                                    .onTapGesture {
+                                        isDiveTimeEditing.toggle()
+                                    }
+                                Spacer()
+                            }
+                        }
+                        
+                        // Dive Time Display and Slider
+                        Spacer()
+                        Text("Recommendation:")
                         
                         Spacer()
                         Text("Plan For Expected Conditions:")
-                        TextField("Notes about water conditions here...", text: $p_condNotes).textFieldStyle(.roundedBorder)
+                        TextField("Notes about water conditions here...", text: $p_condNotes)
+                            .textFieldStyle(.roundedBorder)
                         
                     //Mission
                     case .mission:
@@ -271,7 +311,7 @@ struct MyDivesView: View {
                 if dives.isEmpty {
                     ContentUnavailableView(
                         "No Dives Yet",
-                        systemImage: "water.waves",
+                        systemImage: "water.waves.slash",
                         description: Text("Press '+' to plan your first dive!")
                     )
                 } else {
@@ -305,6 +345,10 @@ struct MyDivesView: View {
     private func deleteDives(at offsets: IndexSet) {
         dives.remove(atOffsets: offsets)
     }
+}
+
+#Preview {
+    ContentView()
 }
 
 //// DiveRow.swift

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeScreen: View {
+struct LoadingScreen: View {
     var body: some View {
         VStack {//vertical stack container
             //add dd flag image
@@ -26,5 +26,5 @@ struct HomeScreen: View {
 }
 
 #Preview {
-    HomeScreen()
+    LoadingScreen()
 }
