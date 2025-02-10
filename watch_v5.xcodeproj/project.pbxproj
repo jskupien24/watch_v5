@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC2519622D5A56B000318A47 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AC2519612D5A56B000318A47 /* FirebaseAuth */; };
+		AC2519642D5A56B000318A47 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = AC2519632D5A56B000318A47 /* FirebaseDatabase */; };
 		F057B86F2C9DEEDA00106259 /* watch_v5 Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F057B86E2C9DEEDA00106259 /* watch_v5 Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -109,6 +111,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC2519642D5A56B000318A47 /* FirebaseDatabase in Frameworks */,
+				AC2519622D5A56B000318A47 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +202,8 @@
 			);
 			name = watch_v5;
 			packageProductDependencies = (
+				AC2519612D5A56B000318A47 /* FirebaseAuth */,
+				AC2519632D5A56B000318A47 /* FirebaseDatabase */,
 			);
 			productName = watch_v5;
 			productReference = F057B8482C9DEED800106259 /* watch_v5.app */;
@@ -360,6 +366,9 @@
 			);
 			mainGroup = F057B83F2C9DEED800106259;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AC2519602D5A56B000318A47 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F057B8492C9DEED800106259 /* Products */;
 			projectDirPath = "";
@@ -693,6 +702,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jackskupien.watch-v5";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -730,6 +740,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jackskupien.watch-v5";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -963,6 +974,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AC2519602D5A56B000318A47 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AC2519612D5A56B000318A47 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AC2519602D5A56B000318A47 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		AC2519632D5A56B000318A47 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AC2519602D5A56B000318A47 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F057B8402C9DEED800106259 /* Project object */;
 }

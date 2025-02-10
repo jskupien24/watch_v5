@@ -6,10 +6,28 @@
 //
 
 import SwiftUI
+import FirebaseCore
+import FirebaseAuth
+import FirebaseDatabase
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
+        return true
+    }
+}
 
 @main
 struct watch_v5App: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    init() {
+        FirebaseApp.configure()
+    }
+    let databaseRef = Database.database().reference()
+
+    
     var body: some Scene {
+        
         WindowGroup {
             HomeScreen()
         }
