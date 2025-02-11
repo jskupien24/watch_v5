@@ -71,9 +71,33 @@
 		F057B88A2C9DEEDB00106259 /* watch_v5 Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "watch_v5 Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F0B7D05A2D5BE5FE001ACFE0 /* Exceptions for "watch_v5" folder in "watch_v5" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				NavScreens/MyDivesBackup.txt,
+			);
+			target = F057B8472C9DEED800106259 /* watch_v5 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		F0B7D05B2D5BE5FE001ACFE0 /* Exceptions for "watch_v5" folder in "Compile Sources" phase from "watch_v5" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = F057B8442C9DEED800106259 /* Sources */;
+			membershipExceptions = (
+				NavScreens/MyDivesBackup.txt,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F057B84A2C9DEED800106259 /* watch_v5 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F0B7D05A2D5BE5FE001ACFE0 /* Exceptions for "watch_v5" folder in "watch_v5" target */,
+				F0B7D05B2D5BE5FE001ACFE0 /* Exceptions for "watch_v5" folder in "Compile Sources" phase from "watch_v5" target */,
+			);
 			path = watch_v5;
 			sourceTree = "<group>";
 		};

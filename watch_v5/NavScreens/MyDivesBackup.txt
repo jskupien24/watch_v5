@@ -1,4 +1,12 @@
 //
+//  Dive.swift
+//  watch_v5
+//
+//  Created by Jack Skupien on 2/11/25.
+//
+
+
+//
 //  MyDives.swift
 //  watch_v5
 //
@@ -12,9 +20,9 @@ struct Dive: Identifiable {
     let id = UUID()
     let date: Date
     let location: String
-    let p_depth: Double
+    let p_depth: Int
     let p_diveTime: Double
-    let p_pctOxygen: Double
+    let p_pctOxygen: Int
     let p_dcModel: NewDiveView.Model
     let p_sGroup: NewDiveView.Group
     let p_eGroup: NewDiveView.Group
@@ -53,48 +61,19 @@ enum DiveFormSection: Int, CaseIterable {
 struct NewDiveView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var dives: [Dive]
-    
-    //BuhlmannCalculator stuff
-    @StateObject private var calculator = BuhlmannCalculator()
-    @State private var diveResults: DiveResults?
-    
-    
-    private var safetyStatus: String {
-        guard let results = diveResults else { return "" }
-        
-        let depthInMeters = Double(p_depth) * 0.3048  //convert feet to meters
-        if depthInMeters > results.mod {
-            return "⚠️ Exceeds Maximum Operating Depth!"
-        }
-        if !results.isWithinLimits {
-            return "⚠️ Decompression Required"
-        }
-        return "✅ Within No-Decompression Limits"
-    }
-    
-    private func updateDiveCalculations() {
-        let depthInMeters = Double(p_depth) * 0.3048  //convert input feet to meters
-        diveResults = calculator.calculateRecreationalLimits(
-            depth: depthInMeters,
-            time: p_diveTime,
-            o2Percentage: Double(p_pctOxygen)
-        )
-    }
-    
-    //editing states
     @State private var isEditing = false //changes color of slider value when editing
     @State private var isDiveTimeEditing = false //allows you to edit dive time in other menus
     
-    //Form fields
+    // Form fields
     
     //basic
     @State private var date = Date()
     @State private var location = ""
     
     //o
-    @State private var p_depth = 0.0
+    @State private var p_depth = 0
     @State private var p_diveTime = 0.0 //Make this a time
-    @State private var p_pctOxygen = 21.0 //Make this a pct
+    @State private var p_pctOxygen = 0 //Make this a pct
     
     //d
     enum Model: String, CaseIterable, Identifiable {
@@ -147,52 +126,11 @@ struct NewDiveView: View {
                         DatePicker("Date", selection: $date)
                         TextField("Location", text: $location)
                         
-                    //Oxygen (with Bühlmann algorithm)
+                    //Oxygen
                     case .oxygen:
-//                        Stepper("Planned Depth: **\(Int(p_depth)) ft**", value: $p_depth, in: 0...130)
-                        Slider(value: $p_depth, in: 0...130, step: 1//,
-//                               onEditingChanged: { editing in
-//                                    isEditing = editing
-//                                }
-                        ).onChange(of: p_depth) { _, _ in updateDiveCalculations() }
-                        Text("Planned Depth: **\(Int(p_depth)) ft**")
-                            .foregroundColor(isEditing ? .accentColor : .gray)
-//                        Stepper("Planned Dive Time: **\(Int(p_diveTime)) min**", value: $p_diveTime, in: 0...120)
-                        Slider(value: $p_diveTime, in: 0...120, step: 1//,
-//                               onEditingChanged: { editing in
-//                                    isEditing = editing
-//                                }
-                        ).onChange(of: p_diveTime) { _, _ in updateDiveCalculations() }
-
-                        Text("Planned Dive Time: **\(Int(p_diveTime)) min**")
-                            .foregroundColor(isEditing ? .accentColor : .gray)
-                        
-//                        Stepper("Percent Oxygen: **\(Int(p_pctOxygen))%**", value: $p_pctOxygen, in: 21...40)
-                        Slider(value: $p_pctOxygen, in: 21...40, step: 1//,
-//                               onEditingChanged: { editing in
-//                                    isEditing = editing
-//                                }
-                        ).onChange(of: p_pctOxygen) { _, _ in updateDiveCalculations() }
-
-                        Text("Percent Oxygen: **\(Int(p_pctOxygen)) %**")
-                            .foregroundColor(isEditing ? .accentColor : .gray)
-                        
-                        if let results = diveResults{
-                            Text("**\(safetyStatus)**")
-                                .foregroundColor(results.isWithinLimits ? .green : .red)
-                            
-                            Text("No-Decompression Limit: \(Int(results.ndl)) minutes")
-                                    Text("Maximum Operating Depth: \(Int(results.mod))ft")
-                                    
-                            if !results.decoStops.isEmpty {
-                                Text("Required Decompression Stops:")
-                                ForEach(results.decoStops, id: \.depth) { stop in
-                                    Text("  • \(Int(stop.depth * 3.28084))ft for \(Int(stop.time)) minutes")
-                                }
-                                Text("Total Ascent Time: \(Int(results.totalAscentTime)) minutes")
-                            }
-                        }
-                        //changes calculations upon edit
+                        Stepper("Planned Depth: **\(Int(p_depth)) ft**", value: $p_depth, in: 0...40)
+                        Stepper("Planned Dive Time: **\(Int(p_diveTime)) min**", value: $p_diveTime, in: 0...40)
+                        Stepper("Percent Oxygen: **\(Int(p_pctOxygen))%**", value: $p_pctOxygen, in: 0...40)
                        
                     //Decompression
                     case .decompression:
@@ -352,9 +290,6 @@ struct NewDiveView: View {
                     }
                 }
                 .padding()
-                .onAppear {
-                    updateDiveCalculations()  // Calculate initial results when view appears
-                }
             }
             .navigationTitle("Plan New Dive")
             .navigationBarTitleDisplayMode(.inline)
@@ -379,11 +314,28 @@ struct DiveRow: View {
                 .font(.headline)
             Text(dive.date.formatted(date: .long, time: .shortened))
                 .font(.subheadline)
+//            Text("Type: \(dive.diveType)")
+//                .font(.subheadline)
+//            Text("Depth: \(Int(dive.maxDepth))m • Time: \(dive.bottomTime)min")
+//                .font(.subheadline)
+//                .foregroundColor(.gray)
         }
         .padding(.vertical, 4)
     }
 }
 
+//// MyDivesView.swift
+//struct Dive: Identifiable {
+//    let id = UUID()
+//    let date: Date
+//    let location: String
+//    // Add more dive properties as needed, such as:
+//    // let depth: Double
+//    // let duration: TimeInterval
+//    // let waterTemperature: Double
+//    // let visibility: Int
+//}
+//
 // MyDivesView.swift
 struct MyDivesView: View {
     @State private var dives: [Dive] = []
@@ -435,3 +387,54 @@ struct MyDivesView: View {
 #Preview {
     ContentView()
 }
+
+//// DiveRow.swift
+//struct DiveRow: View {
+//    let dive: Dive
+//    
+//    var body: some View {
+//        VStack(alignment: .leading) {
+//            Text(dive.location)
+//                .font(.headline)
+//            Text(dive.date.formatted(date: .long, time: .shortened))
+//                .font(.subheadline)
+//                .foregroundColor(.gray)
+//        }
+//        .padding(.vertical, 4)
+//    }
+//}
+//
+//// NewDiveView.swift
+//struct NewDiveView: View {
+//    @Environment(\.dismiss) private var dismiss
+//    @Binding var dives: [Dive]
+//    
+//    @State private var date = Date()
+//    @State private var location = ""
+//    
+//    var body: some View {
+//        NavigationView {
+//            Form {
+//                DatePicker("Date", selection: $date)
+//                TextField("Location", text: $location)
+//            }
+//            .navigationTitle("Plan New Dive")
+//            .navigationBarTitleDisplayMode(.inline)
+//            .toolbar {
+//                ToolbarItem(placement: .cancellationAction) {
+//                    Button("Cancel") {
+//                        dismiss()
+//                    }
+//                }
+//                ToolbarItem(placement: .confirmationAction) {
+//                    Button("Save") {
+//                        let newDive = Dive(date: date, location: location)
+//                        dives.append(newDive)
+//                        dismiss()
+//                    }
+//                    .disabled(location.isEmpty)
+//                }
+//            }
+//        }
+//    }
+//}
