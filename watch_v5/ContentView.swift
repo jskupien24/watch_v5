@@ -79,26 +79,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
-//old, basic menu bar below
-//struct ContentView: View {
-//    var body: some View {
-//        TabView {//nav menu at the bottom
-//            HomeView()
-//                .tabItem {
-//                    Label("Home", systemImage: "house.fill")
-//                }
-//
-//            MyDivesView()
-//                .tabItem {
-//                    Label("My Dives", systemImage: "water.waves")
-//                        .symbolEffect(.breathe.pulse.byLayer, options: .nonRepeating)
-//                }
-//
-//            ProfileView()
-//                .tabItem {
-//                    Label("Profile", systemImage: "person.fill")
-//                }
-//        }
-//    }
-//}
