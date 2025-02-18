@@ -1,4 +1,4 @@
-class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+/* class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager = CLLocationManager()
     @Published var userLocation: CLLocationCoordinate2D?
 
@@ -21,3 +21,4 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         print("Failed to get location: \(error.localizedDescription)")
     }
 }
+*/
