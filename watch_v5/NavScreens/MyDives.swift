@@ -62,7 +62,8 @@ struct NewDiveView: View {
     private var safetyStatus: String {
         guard let results = diveResults else { return "" }
         
-        let depthInMeters = Double(p_depth) * 0.3048  //convert feet to meters
+        // Convert input depth to meters for comparison
+        let depthInMeters = Double(p_depth) * 0.3048
         if depthInMeters > results.mod {
             return "⚠️ Exceeds Maximum Operating Depth!"
         }
@@ -73,13 +74,31 @@ struct NewDiveView: View {
     }
     
     private func updateDiveCalculations() {
-        let depthInMeters = Double(p_depth) * 0.3048  //convert input feet to meters
+        // Convert feet to meters for calculator
+        let depthInMeters = Double(p_depth) * 0.3048
         diveResults = calculator.calculateRecreationalLimits(
             depth: depthInMeters,
             time: p_diveTime,
             o2Percentage: Double(p_pctOxygen)
         )
     }
+    
+//    func getThermalRecommendation(temp: Double, diveTime: Double) -> Int {
+//        switch temp {
+//        case 92...:
+//            return 0//"No wetsuit required"
+//        case 85...:
+//            return diveTime > 30 ? 1 : 2 //"Shorty Wetsuit (2mm-3mm)" : "No wetsuit or Rash Guard"
+//        case 75..<85:
+//            return diveTime > 30 ? 3 : 4//"3-4mm Full Wetsuit": "3mm Full Wetsuit"
+//        case 65..<75:
+//            return diveTime > 40 ? 5 : 6//"5-7mm Full Wetsuit" : "5mm Full Wetsuit"
+//        case 50..<65:
+//            return diveTime > 30 ? 7 : 8//"Semi or full Dry Suit" : "7mm Wetsuit or Semi-Dry Suit"
+//        default:
+//            return 9//"Dry Suit (Below 50ºF)"
+//        }
+//    }
     
     //editing states
     @State private var isEditing = false //changes color of slider value when editing
@@ -118,6 +137,7 @@ struct NewDiveView: View {
     @State private var p_startPressure = 3000.0
     
     //t
+    @State private var rec = "none"
     @State private var p_condNotes = ""
     @State private var p_temp = 75.0
     
@@ -149,7 +169,6 @@ struct NewDiveView: View {
                         
                     //Oxygen (with Bühlmann algorithm)
                     case .oxygen:
-//                        Stepper("Planned Depth: **\(Int(p_depth)) ft**", value: $p_depth, in: 0...130)
                         Slider(value: $p_depth, in: 0...130, step: 1//,
 //                               onEditingChanged: { editing in
 //                                    isEditing = editing
@@ -157,7 +176,6 @@ struct NewDiveView: View {
                         ).onChange(of: p_depth) { _, _ in updateDiveCalculations() }
                         Text("Planned Depth: **\(Int(p_depth)) ft**")
                             .foregroundColor(isEditing ? .accentColor : .gray)
-//                        Stepper("Planned Dive Time: **\(Int(p_diveTime)) min**", value: $p_diveTime, in: 0...120)
                         Slider(value: $p_diveTime, in: 0...120, step: 1//,
 //                               onEditingChanged: { editing in
 //                                    isEditing = editing
@@ -166,8 +184,6 @@ struct NewDiveView: View {
 
                         Text("Planned Dive Time: **\(Int(p_diveTime)) min**")
                             .foregroundColor(isEditing ? .accentColor : .gray)
-                        
-//                        Stepper("Percent Oxygen: **\(Int(p_pctOxygen))%**", value: $p_pctOxygen, in: 21...40)
                         Slider(value: $p_pctOxygen, in: 21...40, step: 1//,
 //                               onEditingChanged: { editing in
 //                                    isEditing = editing
@@ -191,8 +207,7 @@ struct NewDiveView: View {
                                 }
                                 Text("Total Ascent Time: \(Int(results.totalAscentTime)) minutes")
                             }
-                        }
-                        //changes calculations upon edit
+                        }//changes calculations upon edit
                        
                     //Decompression
                     case .decompression:
@@ -279,15 +294,102 @@ struct NewDiveView: View {
                                     .onTapGesture {
                                         isDiveTimeEditing.toggle()
                                     }
-                                Spacer()
                             }
                         }
                         
-                        // Dive Time Display and Slider
-                        Spacer()
-                        Text("Recommendation:")
+                        //Recommendation
+                        VStack(alignment: .leading){
+                            Text("Recommendation:")
+                            switch p_temp {
+                            case 90...:
+                                Text("**No wetsuit required**")
+                                    .foregroundColor(.accentColor)
+                                //should i put an image here?
+                                HStack{
+                                    Spacer()
+                                    Image("none")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 95, height: 214)
+                                        .foregroundStyle(.tint)
+                                    Spacer()
+                                }
+                            case 80...:
+                                Text("**\(p_diveTime > 30 ? "Shorty Wetsuit (2mm-3mm)" : "No wetsuit required")**")
+                                    .foregroundColor(.orange)
+                                if p_diveTime > 30{
+                                    HStack{
+                                        Spacer()
+                                        Image("shorty")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 95, height: 214)
+                                            .foregroundStyle(.tint)
+                                        Spacer()
+                                    }
+                                }
+                                else{
+                                    HStack{
+                                        Spacer()
+                                        Image("none")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 95, height: 214)
+                                            .foregroundStyle(.tint)
+                                        Spacer()
+                                    }
+                                    }
+                            case 70..<80:
+                                Text("**\(p_diveTime > 30 ? "3-4mm Full Wetsuit": "3mm Full Wetsuit")**")
+                                    .foregroundColor(.yellow)
+                                HStack{
+                                    Spacer()
+                                    Image("3mm")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 95, height: 214)
+                                        .foregroundStyle(.tint)
+                                    Spacer()
+                                }
+                            case 65..<70:
+                                Text("**\(p_diveTime > 30 ? "5-7mm Full Wetsuit" : "5mm Full Wetsuit")**")
+                                    .foregroundColor(.teal)
+                                HStack{
+                                    Spacer()
+                                    Image("5mm")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 95, height: 214)
+                                        .foregroundStyle(.tint)
+                                    Spacer()
+                                }
+                            case 50..<65:
+                                Text("**\(p_diveTime > 30 ? "Semi or full Dry Suit" : "7mm Wetsuit or Semi-Dry Suit")**")
+                                    .foregroundColor(.blue)
+                                HStack{
+                                    Spacer()
+                                    Image("7mm")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 95, height: 214)
+                                        .foregroundStyle(.tint)
+                                    Spacer()
+                                }
+                            default:
+                                Text("**Dry Suit**")
+                                    .foregroundColor(.cyan)
+                                HStack{
+                                    Spacer()
+                                    Image("dry")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 95, height: 214)
+                                        .foregroundStyle(.tint)
+                                    Spacer()
+                                }
+                            }
+                        }
                         
-                        Spacer()
                         Text("Plan For Expected Conditions:")
                         TextField("Notes about water conditions here...", text: $p_condNotes)
                             .textFieldStyle(.roundedBorder)
