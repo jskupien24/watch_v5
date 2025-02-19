@@ -73,9 +73,22 @@
 		F057B88A2C9DEEDB00106259 /* watch_v5 Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "watch_v5 Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F09D8E382D668970003EFD4D /* Exceptions for "watch_v5" folder in "watch_v5" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"watch-v5-Info.plist",
+			);
+			target = F057B8472C9DEED800106259 /* watch_v5 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F057B84A2C9DEED800106259 /* watch_v5 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F09D8E382D668970003EFD4D /* Exceptions for "watch_v5" folder in "watch_v5" target */,
+			);
 			path = watch_v5;
 			sourceTree = "<group>";
 		};
@@ -689,8 +702,10 @@
 				DEVELOPMENT_TEAM = FATH79KY4N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "watch-v5-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location Services";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -728,8 +743,10 @@
 				DEVELOPMENT_TEAM = FATH79KY4N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "watch-v5-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location Services";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
