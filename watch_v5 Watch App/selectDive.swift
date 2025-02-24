@@ -3,7 +3,8 @@
 //  watch_v5
 //
 //  Created by Fort Hunter on 11/12/24
-//
+//  Continued by Jack Skupien on 02/24/25
+
 import SwiftUI
 
 struct Dive: Identifiable {
@@ -13,7 +14,7 @@ struct Dive: Identifiable {
 
 var dives = [Dive(name: "Planned Dives"),
              Dive(name: "Unplanned Dive"),
-             Dive(name: "Snorkle"),
+             Dive(name: "Snorkel"),
              Dive(name:"Free Dive")]
 
 struct FadeView: View {

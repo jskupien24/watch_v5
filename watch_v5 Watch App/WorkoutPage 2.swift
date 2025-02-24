@@ -1,14 +1,16 @@
 //
-//  workoutPage.swift
+//  WorkoutPage 2.swift
 //  watch_v5
 //
-//  Created by Fort Hunter on 10/29/24.
+//  Created by Jack Skupien on 2/24/25.
 //
 
 import SwiftUI
 
-struct WorkoutPage: View {
+struct WorkoutPage2: View {
+    @EnvironmentObject var manager: HealthManager
     var body: some View {
+//        .EnvironmentObject(manager)
         ZStack {
             Text("Heart Rate")
                 .bold()
@@ -37,13 +39,11 @@ struct WorkoutPage: View {
                 .bold()
                 .font(.system(size: 28))
                 .position(x: 60, y: 140)
-            
-            
-        }
-    }
-}
+
+        }//end zstack
+    }//end view
+}//end struct
 
 #Preview {
-    WorkoutPage()
-    
-}
+    WorkoutPage2()
+}//end preview

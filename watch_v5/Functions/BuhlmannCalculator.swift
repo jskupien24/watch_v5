@@ -182,7 +182,7 @@ class BuhlmannCalculator: ObservableObject {
     func calculateRecreationalLimits(depth: Double, time: Double, o2Percentage: Double = 21) -> DiveResults {
         // Input depth should be in meters
         let gasMix = GasMix(fO2: o2Percentage / 100, fHe: 0.0)
-        let ndl = calculateNDL(depth: depth)
+        let ndl = getTestNDL(depth: depth)
         let decoStops = calculateDecoStops(depth: depth, bottomTime: time)
         let mod = calculateMOD(fO2: o2Percentage / 100)
         
@@ -210,4 +210,24 @@ struct DiveResults {
     let mod: Double                              // Max operating depth in meters
     let totalAscentTime: Double                  // Total time needed for ascent
     let isWithinLimits: Bool                    // Whether dive is within NDL
+}
+
+private func getTestNDL(depth: Double) -> Double {
+    // Standard recreational dive table values
+    let depthFt = depth * 3.28084
+    switch depthFt {
+    case 0..<35: return 205
+    case 35..<40: return 140
+    case 40..<50: return 100
+    case 50..<60: return 70
+    case 60..<70: return 50
+    case 70..<80: return 40
+    case 80..<90: return 30
+    case 90..<100: return 25
+    case 100..<110: return 20
+    case 110..<120: return 15
+    case 120..<130: return 12
+    case 130..<140: return 10
+    default: return 5
+    }
 }
