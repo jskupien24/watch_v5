@@ -73,22 +73,9 @@
 		F057B88A2C9DEEDB00106259 /* watch_v5 Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "watch_v5 Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F09D8E382D668970003EFD4D /* Exceptions for "watch_v5" folder in "watch_v5" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"watch-v5-Info.plist",
-			);
-			target = F057B8472C9DEED800106259 /* watch_v5 */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F057B84A2C9DEED800106259 /* watch_v5 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				F09D8E382D668970003EFD4D /* Exceptions for "watch_v5" folder in "watch_v5" target */,
-			);
 			path = watch_v5;
 			sourceTree = "<group>";
 		};
