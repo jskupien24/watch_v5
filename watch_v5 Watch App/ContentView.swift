@@ -8,20 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var manager: HealthManager
     var body: some View {
-        VStack {
-            Image("flag")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-            Text("Hello, Diver!")
-                .bold()
-                .font(.system(size: 16))
-                .frame(width: 100)
-        }
-        .padding()
+//        VStack {
+//            Image("flag")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 100, height: 100)
+////                .imageScale(.large)
+////                .foregroundStyle(.tint)
+//            Text("Hello, Diver!")
+//                .bold()
+//                .font(.system(size: 16))
+//                .frame(width: 100)
+//        }
+//        .padding()
+        selectDive()
+        .environmentObject(manager)
     }
 }
 

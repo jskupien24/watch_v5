@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct watch_v5_Watch_AppApp: App {
+    @StateObject var manager = HealthManager()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(manager)
         }
     }
 }
