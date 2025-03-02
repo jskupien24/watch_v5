@@ -9,6 +9,7 @@ import SwiftUI
 
 // ProfileView.swift
 struct ProfileView: View {
+    @StateObject private var authViewModel = AuthViewModel()
     var body: some View {
         NavigationView {
             VStack {
@@ -28,7 +29,9 @@ struct ProfileView: View {
 //                    Spacer()
                     //profile info
                     VStack(alignment: .leading){
-                        Text("Jack Skupien").font(.system(size:28, weight: .semibold))
+                        if let user = authViewModel.user {
+                            Text("\(user.email ?? "User")").font(.system(size:28, weight: .semibold))
+                        }
                         Text("Master Diver (Candidate)").font(.system(size:23, weight: .light))
                             //.foregroundColor(.accentColor)
                         Text("Rescue Diver").font(.system(size:18, weight: .light))

@@ -12,49 +12,62 @@ import FirebaseAuth
 import FirebaseDatabase
 
 struct LogIn: View {
+    @StateObject private var authViewModel = AuthViewModel()
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showAlert: Bool = false
+    @State private var loggedIn: Bool = false
     @State private var alertMessage: String = ""
     @State private var userInfo: [String: Any]? = nil
+    @State private var navigateToHome = false
     
     var body: some View {
-        VStack(spacing: 16) {
-            VStack(alignment: .leading) {
-                Text("Email")
-                    .padding(.top, 50)
-                TextField("Enter Email", text: $email)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom, 16)
+        NavigationStack{
+            VStack(spacing: 16) {
+                VStack(alignment: .leading) {
+                    Text("Email")
+                        .padding(.top, 50)
+                    TextField("Enter Email", text: $email)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.bottom, 16)
+                    
+                    Text("Password")
+                    SecureField("Enter Password", text: $password)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+                .frame(maxWidth: 400)
+                .padding(.horizontal, 16)
                 
-                Text("Password")
-                SecureField("Enter Password", text: $password)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Button(action: {
+                    authViewModel.logIn(email: email, password: password){success in
+                        if success{
+                        navigateToHome = true
+                    }}
+                }) {
+                    Text("Submit")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                }
+                .frame(maxWidth: 300)
+                .padding(.bottom, 50)
+                .navigationDestination(isPresented: $navigateToHome) {
+                    ContentView().environmentObject(authViewModel)
+                }
+                
             }
-            .frame(maxWidth: 400)
-            .padding(.horizontal, 16)
-            
-            Button(action: {
-                logInUser()
-            }) {
-                Text("Submit")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(Color.blue)
-                    .cornerRadius(8)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.systemGray6))
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Authentication"),
+                    message: Text(alertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
+                
             }
-            .frame(maxWidth: 300)
-            .padding(.bottom, 50)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGray6))
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("Authentication"),
-                message: Text(alertMessage),
-                dismissButton: .default(Text("OK"))
-            )
         }
         
     }
@@ -90,6 +103,7 @@ struct LogIn: View {
                                     Email: \(email)
                                     """
                     showAlert = true
+                    loggedIn = true
                 } else {
                     alertMessage = "No user data found."
                     showAlert = true
