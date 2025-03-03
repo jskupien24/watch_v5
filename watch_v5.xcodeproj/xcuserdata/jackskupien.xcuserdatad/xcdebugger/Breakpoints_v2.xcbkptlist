@@ -24,7 +24,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E51D1CBB-F602-49E7-B47E-6E5DAE9BF909"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../../var/folders/8s/87fx2s5d6fsdx0q2xj19_xw40000gn/T/xcode/scm/watch_v5/33fff164e6df2365d0b1db055071baa4f00749bb/watch_v5 Watch App/ContentView.swift"
