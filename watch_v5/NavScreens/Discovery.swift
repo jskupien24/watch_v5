@@ -4,7 +4,6 @@
 //
 //  Created by Faith Chernowski on 2/8/25.
 //
-
 import SwiftUI
 import CoreLocation
 import MapKit
@@ -15,14 +14,14 @@ struct DiveSite: Identifiable {
     let name: String
     let description: String
     let coordinate: CLLocationCoordinate2D
-
-    var imageURLs: [String] {
-        let query = name.replacingOccurrences(of: " ", with: "-").lowercased()
-        return (1...3).map { "https://source.unsplash.com/400x300/?scuba-diving,\(query),ocean&sig=\($0)" }
-    }
+    let depth: Double
+    let waterTemperature: Double
+    let visibility: Double
+    let rating: Double
+    let imageNames: [String] // Local images
 }
 
-// MARK: - Location Manager
+// MARK: - Location Manager (Find User's GPS Position)
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager = CLLocationManager()
     @Published var userLocation: CLLocationCoordinate2D?
@@ -30,6 +29,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     override init() {
         super.init()
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
@@ -43,122 +43,75 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 }
 
-// MARK: - Sample Dive Sites
-let sampleDiveSites = [
-    DiveSite(name: "Blue Hole", description: "A deep, circular sinkhole with marine life.", coordinate: CLLocationCoordinate2D(latitude: 24.5271, longitude: -87.6278)),
-    DiveSite(name: "Shark Reef", description: "A popular site with frequent shark sightings.", coordinate: CLLocationCoordinate2D(latitude: 25.3000, longitude: -80.1500)),
-    DiveSite(name: "Coral Gardens", description: "Vibrant coral reefs and colorful fish.", coordinate: CLLocationCoordinate2D(latitude: 26.2000, longitude: -81.5000))
-]
-
-// MARK: - Dive Site Feed View
-struct DiveSiteFeedView: View {
-    @StateObject private var locationManager = LocationManager()
+// MARK: - Dive Site ViewModel
+class DiveSiteViewModel: ObservableObject {
+    @Published var diveSites: [DiveSite] = []
     
-    var sortedDiveSites: [DiveSite] {
-        guard let userLocation = locationManager.userLocation else { return sampleDiveSites }
-        return sampleDiveSites.sorted {
-            let distance1 = CLLocation(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude).distance(from: CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude))
-            let distance2 = CLLocation(latitude: $1.coordinate.latitude, longitude: $1.coordinate.longitude).distance(from: CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude))
-            return distance1 < distance2
-        }
-    }
-    
-    var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                // MARK: - Fixed Header with Updated Gradient
-                ZStack {
-                    LinearGradient(gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.5)]),
-                                   startPoint: .top, endPoint: .bottom)
-                        .edgesIgnoringSafeArea(.top)
-
-                    VStack(spacing: 4) {
-                        Text("Nearby Dive Spots")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
-
-                        if let userLocation = locationManager.userLocation {
-                            Text("Searching near: \(userLocation.latitude), \(userLocation.longitude)")
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.8))
-                        } else {
-                            Text("Finding your location...")
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.8))
-                        }
-                    }
-                    .padding(.top, max(UIApplication.shared.connectedScenes
-                        .compactMap { ($0 as? UIWindowScene)?.windows.first?.safeAreaInsets.top }
-                        .first ?? 10, 10))
-                    .padding(.bottom, 10)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 100) // Adjusted header height
-
-                // MARK: - Dive Feed List
-                ScrollView {
-                    VStack {
-                        ForEach(sortedDiveSites) { site in
-                            NavigationLink(destination: DiveSiteDetailView(diveSite: site)) {
-                                DiveSiteCard(diveSite: site)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .padding()
-                }
-                .background(Color.blue.opacity(0.1))
-            }
-        }
+    func fetchNearbyDiveSites() {
+        self.diveSites = [
+            DiveSite(name: "Loch Low-Minn",
+                     description: "A spring-fed quarry with freshwater jellyfish and clear visibility.",
+                     coordinate: CLLocationCoordinate2D(latitude: 35.6043, longitude: -84.4724),
+                     depth: 30.0, waterTemperature: 16.0, visibility: 20.0, rating: 4.5,
+                     imageNames: ["loch1", "loch2", "loch3"]),
+            
+            DiveSite(name: "Philadelphia Quarry",
+                     description: "A popular dive site with various sunken structures and aquatic life.",
+                     coordinate: CLLocationCoordinate2D(latitude: 35.6745, longitude: -84.4172),
+                     depth: 40.0, waterTemperature: 18.0, visibility: 25.0, rating: 4.7,
+                     imageNames: ["phillie1", "phillie2", "phillie3"]),
+            
+            DiveSite(name: "Martha’s Quarry",
+                     description: "A deep freshwater dive with sunken boats and training platforms.",
+                     coordinate: CLLocationCoordinate2D(latitude: 36.0053, longitude: -86.3771),
+                     depth: 35.0, waterTemperature: 17.0, visibility: 22.0, rating: 4.6,
+                     imageNames: ["martha1", "martha2", "martha3"])
+        ]
     }
 }
 
-// MARK: - Dive Site Card with Improved Image Handling
+// MARK: - Dive Site Card
 struct DiveSiteCard: View {
     let diveSite: DiveSite
-
+    
     var body: some View {
         VStack(alignment: .leading) {
-            // Image Carousel with Improved Placeholder
             TabView {
-                ForEach(diveSite.imageURLs, id: \.self) { url in
-                    AsyncImage(url: URL(string: url)) { phase in
-                        if let image = phase.image {
-                            image.resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 180)
-                                .clipped()
-                        } else if phase.error != nil {
-                            Image("fallback-dive") // Replace with a default image asset
-                                .resizable()
-                                .scaledToFill()
-                                .frame(height: 180)
-                                .clipped()
-                        } else {
-                            ProgressView()
-                                .frame(height: 180)
-                        }
-                    }
+                ForEach(diveSite.imageNames, id: \ .self) { imageName in
+                    Image(imageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 250)
+                        .clipped()
                 }
             }
-            .frame(height: 180)
+            .frame(height: 250)
             .tabViewStyle(PageTabViewStyle())
-
-            // Dive Site Information
-            VStack(alignment: .leading, spacing: 5) {
+            
+            VStack(alignment: .leading, spacing: 8) {
                 Text(diveSite.name)
-                    .font(.headline)
-                    .foregroundColor(.red)
+                    .font(.title2)
+                    .bold()
                 
                 Text(diveSite.description)
-                    .font(.subheadline)
-                    .foregroundColor(.black)
+                    .font(.body)
+                    .foregroundColor(.gray)
+                
+                HStack {
+                    Text("🌊 Depth: \(diveSite.depth, specifier: "%.0f")m")
+                    Text("🌡 Temp: \(diveSite.waterTemperature, specifier: "%.0f")°C")
+                    Text("🔭 Visibility: \(diveSite.visibility, specifier: "%.0f")m")
+                }
+                .font(.headline)
+                .foregroundColor(.blue)
+                
+                Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
+                    .font(.headline)
+                    .foregroundColor(.orange)
             }
             .padding()
         }
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color.white).shadow(radius: 3))
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.white).shadow(radius: 5))
         .padding(.bottom, 10)
     }
 }
@@ -168,44 +121,96 @@ struct DiveSiteDetailView: View {
     let diveSite: DiveSite
     
     var body: some View {
-        VStack {
-            Map(coordinateRegion: .constant(MKCoordinateRegion(
-                center: diveSite.coordinate,
-                span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-            )), annotationItems: [diveSite]) { site in
-                MapMarker(coordinate: site.coordinate, tint: .red)
-            }
-            .frame(height: 300)
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Text(diveSite.name)
-                    .font(.largeTitle)
-                    .bold()
-                    .foregroundColor(.red)
+        ScrollView {
+            VStack(spacing: 10) {
+                TabView {
+                    ForEach(diveSite.imageNames, id: \ .self) { imageName in
+                        Image(imageName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 300)
+                            .clipped()
+                    }
+                }
+                .frame(height: 300)
+                .tabViewStyle(PageTabViewStyle())
                 
-                Text(diveSite.description)
-                    .font(.body)
-                    .foregroundColor(.black)
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(diveSite.name)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
+                    
+                    Text(diveSite.description)
+                        .font(.body)
+                        .foregroundColor(.gray)
+                    
+                    HStack {
+                        Text("🌊 Depth: \(diveSite.depth, specifier: "%.0f")m")
+                        Text("🌡 Temp: \(diveSite.waterTemperature, specifier: "%.0f")°C")
+                        Text("🔭 Visibility: \(diveSite.visibility, specifier: "%.0f")m")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.blue)
+                    
+                    Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
+                        .font(.title2)
+                        .foregroundColor(.orange)
+                        .bold()
+                }
+                .padding()
                 
-                Spacer()
+                Map(coordinateRegion: .constant(MKCoordinateRegion(
+                    center: diveSite.coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                )), annotationItems: [diveSite]) { site in
+                    MapMarker(coordinate: site.coordinate, tint: .red)
+                }
+                .frame(height: 350)
+                .cornerRadius(12)
+                .padding()
             }
-            .padding()
-            
-            Spacer()
         }
-        .background(Color.white)
         .navigationTitle(diveSite.name)
     }
 }
 
-// MARK: - SwiftUI Previews
+// MARK: - Dive Site Feed View
+struct DiveSiteFeedView: View {
+    @StateObject private var locationManager = LocationManager()
+    @StateObject private var viewModel = DiveSiteViewModel()
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Nearby Dive Spots")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .padding()
+                    .onAppear {
+                        viewModel.fetchNearbyDiveSites()
+                    }
+                
+                ScrollView {
+                    VStack {
+                        ForEach(viewModel.diveSites) { site in
+                            NavigationLink(destination: DiveSiteDetailView(diveSite: site)) {
+                                DiveSiteCard(diveSite: site)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                    }
+                    .padding()
+                }
+            }
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+// MARK: - Preview
 struct DiscoveryView_Previews: PreviewProvider {
     static var previews: some View {
         DiveSiteFeedView()
     }
 }
-
-
-
-
-

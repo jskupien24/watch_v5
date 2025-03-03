@@ -6,6 +6,29 @@
 //
 
 import SwiftUI
+import MapKit
+
+struct MapView: View {
+    let dive: NewDive  // Stored property
+    
+    @State private var region: MKCoordinateRegion
+    
+    init(dive: NewDive) {
+        self.dive = dive  // Initialize self.dive first
+        
+        _region = State(initialValue: MKCoordinateRegion(
+            center: dive.coordinates.first?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0),
+            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        ))
+    }
+    
+    var body: some View {
+        Map(coordinateRegion: $region, annotationItems: dive.coordinates) { item in
+            MapMarker(coordinate: item.coordinate, tint: .blue)
+        }
+    }
+}
+
 
 struct DiveFeed: View {
     var body: some View {
@@ -34,7 +57,11 @@ struct DiveFeed: View {
 
 struct User {
     let name: String
-    let profileImage: String
+}
+
+struct IdentifiableCoordinate: Identifiable {
+    let id = UUID()
+    let coordinate: CLLocationCoordinate2D
 }
 
 struct NewDive: Identifiable {
@@ -43,23 +70,55 @@ struct NewDive: Identifiable {
     let location: String
     let duration: String
     let depth: String
-    let mapImage: String
+    let waterTemp: String
+    let visibility: String
+    let coordinates: [IdentifiableCoordinate]
+    let diveImage: String // Hardcoded dive image
 }
 
 let exampleUsers = [
-    User(name: "Diver Name", profileImage: "profile1"),
-    User(name: "Diver Name 1", profileImage: "profile2"),
-    User(name: "Diver Name 2", profileImage: "profile3"),
-    User(name: "Diver Name 3", profileImage: "profile4"),
-    User(name: "Diver Name 4", profileImage: "profile5")
+    User(name: "John Diver"),
+    User(name: "Alice Explorer"),
+    User(name: "Emma Sea"),
+    User(name: "Mark Ocean"),
+    User(name: "Sophie Deep")
 ]
 
 let exampleDives = [
-    NewDive(user: exampleUsers[0], location: "Great Barrier Reef", duration: "45 min", depth: "30m", mapImage: "great_barrier_reef"),
-    NewDive(user: exampleUsers[1], location: "Blue Hole, Belize", duration: "50 min", depth: "40m", mapImage: "blue_hole_belize"),
-    NewDive(user: exampleUsers[2], location: "Maldives Atolls", duration: "35 min", depth: "25m", mapImage: "maldives_atolls"),
-    NewDive(user: exampleUsers[3], location: "Hanauma Bay, Hawaii", duration: "40 min", depth: "20m", mapImage: "hanauma_bay"),
-    NewDive(user: exampleUsers[4], location: "Sipadan Island, Malaysia", duration: "55 min", depth: "35m", mapImage: "sipadan_island")
+    NewDive(user: exampleUsers[0], location: "Great Barrier Reef", duration: "45 min", depth: "30m", waterTemp: "27°C", visibility: "20m",
+            coordinates: [
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: -16.918, longitude: 145.778)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: -16.919, longitude: 145.780)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: -16.920, longitude: 145.782))
+            ], diveImage: "greatbarrierreef"),
+    
+    NewDive(user: exampleUsers[1], location: "Blue Hole, Belize", duration: "50 min", depth: "40m", waterTemp: "25°C", visibility: "30m",
+            coordinates: [
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 17.315, longitude: -87.534)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 17.316, longitude: -87.536)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 17.317, longitude: -87.538))
+            ], diveImage: "bluehole"),
+    
+    NewDive(user: exampleUsers[2], location: "Maldives Atolls", duration: "35 min", depth: "25m", waterTemp: "28°C", visibility: "25m",
+            coordinates: [
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 3.2028, longitude: 73.2207)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 3.2030, longitude: 73.2210)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 3.2032, longitude: 73.2215))
+            ], diveImage: "maldives"),
+
+    NewDive(user: exampleUsers[3], location: "Hanauma Bay, Hawaii", duration: "40 min", depth: "20m", waterTemp: "26°C", visibility: "15m",
+            coordinates: [
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 21.269, longitude: -157.693)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 21.270, longitude: -157.695)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 21.271, longitude: -157.697))
+            ], diveImage: "hawaii_dive"),
+
+    NewDive(user: exampleUsers[4], location: "Sipadan Island, Malaysia", duration: "55 min", depth: "35m", waterTemp: "29°C", visibility: "35m",
+            coordinates: [
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 4.117, longitude: 118.628)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 4.118, longitude: 118.630)),
+                IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 4.119, longitude: 118.632))
+            ], diveImage: "sipadan_dive")
 ]
 
 struct DiveCardView: View {
@@ -68,11 +127,11 @@ struct DiveCardView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Image(dive.user.profileImage)
+                Image(systemName: "person.circle.fill") // Pre-coded SwiftUI profile icon
                     .resizable()
                     .scaledToFill()
                     .frame(width: 40, height: 40)
-                    .clipShape(Circle())
+                    .foregroundColor(.blue)
                 
                 VStack(alignment: .leading) {
                     Text(dive.user.name)
@@ -86,7 +145,11 @@ struct DiveCardView: View {
             }
             .padding(.bottom, 5)
             
-            Image(dive.mapImage)
+            MapView(dive: dive)
+                .frame(height: 200)
+                .cornerRadius(10)
+
+            Image(dive.diveImage)
                 .resizable()
                 .scaledToFit()
                 .cornerRadius(10)
@@ -115,11 +178,11 @@ struct DiveDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Image(dive.user.profileImage)
+                    Image(systemName: "person.circle.fill")
                         .resizable()
                         .scaledToFill()
                         .frame(width: 50, height: 50)
-                        .clipShape(Circle())
+                        .foregroundColor(.blue)
                     
                     Text(dive.user.name)
                         .font(.title2)
@@ -132,25 +195,25 @@ struct DiveDetailView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.blue)
+                
+                MapView(dive: dive)
+                    .frame(height: 300)
+                    .cornerRadius(10)
 
-                Image(dive.mapImage)
+                Image(dive.diveImage)
                     .resizable()
                     .scaledToFit()
                     .cornerRadius(10)
                 
-                HStack {
-                    Image(systemName: "clock.fill")
-                    Text("Duration: \(dive.duration)")
+                VStack(alignment: .leading, spacing: 5) {
+                    HStack { Image(systemName: "clock.fill"); Text("Duration: \(dive.duration)") }
+                    HStack { Image(systemName: "arrow.down.to.line"); Text("Depth: \(dive.depth)") }
+                    HStack { Image(systemName: "thermometer.sun.fill"); Text("Water Temp: \(dive.waterTemp)") }
+                    HStack { Image(systemName: "eye.fill"); Text("Visibility: \(dive.visibility)") }
                 }
                 .font(.title2)
                 .padding(.top, 5)
 
-                HStack {
-                    Image(systemName: "arrow.down.to.line")
-                    Text("Depth: \(dive.depth)")
-                }
-                .font(.title2)
-                
                 Spacer()
             }
             .padding()
@@ -159,6 +222,7 @@ struct DiveDetailView: View {
         .background(Color.blue.opacity(0.1))
     }
 }
+
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
