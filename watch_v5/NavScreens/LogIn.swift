@@ -20,6 +20,7 @@ struct LogIn: View {
     @State private var alertMessage: String = ""
     @State private var userInfo: [String: Any]? = nil
     @State private var navigateToHome = false
+    @State private var navigateToSignUp = false
     
     var body: some View {
         NavigationStack{
@@ -51,10 +52,19 @@ struct LogIn: View {
                         .background(Color.blue)
                         .cornerRadius(8)
                 }
+                Button("Sign Up") {
+                    navigateToSignUp = true
+                }
+                .padding()
+                .foregroundColor(.blue)
+                
                 .frame(maxWidth: 300)
                 .padding(.bottom, 50)
                 .navigationDestination(isPresented: $navigateToHome) {
                     ContentView().environmentObject(authViewModel)
+                }
+                .navigationDestination(isPresented: $navigateToSignUp) {
+                    SignUp() 
                 }
                 
             }
@@ -71,48 +81,7 @@ struct LogIn: View {
         }
         
     }
-    private func logInUser() {
-            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                if let error = error {
-                    alertMessage = "Error: \(error.localizedDescription)"
-                    showAlert = true
-                    return
-                }
-
-                guard let userID = authResult?.user.uid else {
-                    alertMessage = "Unable to retrieve user ID."
-                    showAlert = true
-                    return
-                }
-
-                fetchUserData(userID: userID)
-            }
-        }
-
-        private func fetchUserData(userID: String) {
-            let databaseRef = Database.database().reference()
-            databaseRef.child("users").child(userID).observeSingleEvent(of: .value) { snapshot in
-                if let data = snapshot.value as? [String: Any] {
-                    self.userInfo = data
-                    let name = data["name"] as? String ?? "N/A"
-                    let bio = data["bio"] as? String ?? "N/A"
-                    alertMessage = """
-                                    User Information:
-                                    Name: \(name)
-                                    Bio : \(bio)
-                                    Email: \(email)
-                                    """
-                    showAlert = true
-                    loggedIn = true
-                } else {
-                    alertMessage = "No user data found."
-                    showAlert = true
-                }
-            } withCancel: { error in
-                alertMessage = "Error: \(error.localizedDescription)"
-                showAlert = true
-            }
-        }
+   
     }
 
 #Preview {
