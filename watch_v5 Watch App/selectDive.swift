@@ -54,6 +54,7 @@ struct SplashView: View {
 }
 
 struct selectDive: View{
+    @EnvironmentObject var manager: HealthManager
     var body: some View{
         NavigationStack{
             VStack(alignment: .leading) {
@@ -65,7 +66,7 @@ struct selectDive: View{
                     .frame(maxWidth: .infinity, alignment: .center)
                 List {
                     ForEach(dives){dive in
-                        NavigationLink(destination: WorkoutPage()){
+                        NavigationLink(destination: WorkoutPage2().environmentObject(manager)){
                             Button(action: {
                                 // Handle the button tap here
                                 print(dive.name)

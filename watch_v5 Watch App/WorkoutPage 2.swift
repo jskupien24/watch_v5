@@ -11,12 +11,13 @@ struct WorkoutPage2: View {
     @EnvironmentObject var manager: HealthManager
     var body: some View {
 //        .EnvironmentObject(manager)
+        
         ZStack {
             Text("Heart Rate")
                 .bold()
                 .font(.system(size: 28))
                 .position(x: 70, y: 0)
-            Text("123")
+            Text("\(Int(manager.heartRate))")
                 .foregroundColor(Color.red)
                 .bold()
                 .font(.system(size: 28))
@@ -46,4 +47,5 @@ struct WorkoutPage2: View {
 
 #Preview {
     WorkoutPage2()
+        .environmentObject(HealthManager())
 }//end preview
