@@ -13,6 +13,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 struct ContentView: View {
+    @StateObject private var authViewModel = AuthViewModel()
     @State private var selectedTab = 0
     var body: some View {
         VStack {
@@ -40,6 +41,7 @@ struct ContentView: View {
             }
             .background(Color.white)
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
