@@ -111,14 +111,14 @@ let exampleDives = [
                 IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 21.269, longitude: -157.693)),
                 IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 21.270, longitude: -157.695)),
                 IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 21.271, longitude: -157.697))
-            ], diveImage: "hawaii_dive"),
+            ], diveImage: "hawaii"),
 
     NewDive(user: exampleUsers[4], location: "Sipadan Island, Malaysia", duration: "55 min", depth: "35m", waterTemp: "29°C", visibility: "35m",
             coordinates: [
                 IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 4.117, longitude: 118.628)),
                 IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 4.118, longitude: 118.630)),
                 IdentifiableCoordinate(coordinate: CLLocationCoordinate2D(latitude: 4.119, longitude: 118.632))
-            ], diveImage: "sipadan_dive")
+            ], diveImage: "sipadan")
 ]
 
 struct DiveCardView: View {

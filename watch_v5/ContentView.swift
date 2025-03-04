@@ -25,7 +25,7 @@ struct ContentView: View {
             } else if selectedTab == 2 {
                 DiveFeed()
             } else {
-                ProfileView()
+                ProfileView2()
             }
             
             //show tab bar at bottom
