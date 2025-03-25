@@ -23,15 +23,18 @@ struct ModularCompassView: View {
                 .padding(.top,-20)
             //display modular compass bar
             CompassBar(heading: compass.heading)
-                .frame(height: 40)
+                .frame(height: 31)
                 .padding(.horizontal, 20)
 //                .padding(.top,0)
+            Image(systemName: "arrowtriangle.up.fill")
+                .foregroundStyle(.accent)
+                .padding(EdgeInsets(top: 0, leading:0, bottom: 10, trailing:0))
             //display heading
             Text(" \(Int(compass.heading))°")
                 .font(.largeTitle)
                 .fontWeight(.thin)
                 .foregroundColor(.white)
-                .padding(.bottom, -20)
+                .padding(.bottom, -35)
                 .padding(.top,-10)
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -55,48 +58,22 @@ struct CompassBar: View {
             ForEach(0..<totalTicks, id: \.self) { i in
                 let tickAngle = (heading - Double(centerIndex * 10) + Double(i) * 10).truncatingRemainder(dividingBy: 360)
                 let isHighlighted = abs(tickAngle) < 9.5
-
+                    
                 VStack{
                     Spacer()
                     Rectangle()
-                        .frame(width: 4, height: isHighlighted ? 30 : 20) // Adjust width for better spacing
+                        .frame(width: 4, height: (isHighlighted) ? 30 : 20) // Adjust width for better spacing
                         .foregroundColor(isHighlighted ? .red : .white.opacity(0.5))
                         .cornerRadius(2)
                 }
-                .padding(.bottom,20)
+                .padding(.bottom,5)
             }
         }
         .frame(maxWidth: .infinity, alignment: .center) // Extend fully
-        .offset(x: -2) // Slight shift to center correctly
+        .offset(x: -3) // Slight shift to center correctly
         .clipped() // Ensure no extra space
     }
 }
-
-
-//struct CompassBar: View {
-//    let heading: Double
-//    let totalTicks = 36
-//    let centerIndex = 18 //helps with centering the current heading
-//    
-//    var body: some View {
-//        GeometryReader { geo in
-//            let tickWidth = geo.size.width / CGFloat(totalTicks)
-//            
-//            HStack(spacing: 2) {
-//                ForEach(0..<totalTicks, id: \.self) { i in
-//                    let tickAngle = (heading - Double(centerIndex * 10) + Double(i) * 10).truncatingRemainder(dividingBy: 360)//Double(i) * (360.0 / Double(totalTicks))
-//                    let isHighlighted = abs(heading - tickAngle) < 5
-//                    
-//                    Rectangle()
-//                        .frame(width: tickWidth, height: isHighlighted ? 30 : 20)
-//                        .foregroundColor(isHighlighted ? .accentColor : .white.opacity(0.5))
-//                        .cornerRadius(2)
-//                }
-//            }
-//        }
-//    }
-//}
-
 
 #Preview {
     ModularCompassView()

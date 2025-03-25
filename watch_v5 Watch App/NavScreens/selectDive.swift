@@ -67,7 +67,7 @@ struct selectDive: View{
 //                    .foregroundStyle(.accent)
                     .multilineTextAlignment(.center)
 //                    .padding(.top, -15)
-                    .padding(EdgeInsets(top: -10, leading: 0, bottom:10, trailing: 0))
+                    .padding(EdgeInsets(top: -8, leading: 0, bottom:10, trailing: 0))
                     .frame(maxWidth: .infinity, alignment: .center)
                 List {
                     ForEach(dives){ dive in

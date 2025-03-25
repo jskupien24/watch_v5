@@ -1,21 +1,13 @@
 //
-//  CompassView.swift
+//  compass2.swift
 //  watch_v5
 //
 //  Created by Jack Skupien on 3/24/25.
 //
 
-
-//
-//  Untitled.swift
-//  watch_v5
-//
-//  Created by Jack Skupien on 3/24/25 (adapted from 3/03/25 version).
-//
-
 import SwiftUI
 
-struct CompassView: View {
+struct CompassViewETE: View {
     @StateObject private var compass = CompassManager()
     
     var body: some View {
@@ -24,30 +16,33 @@ struct CompassView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
-            CompassNeedle(angle: compass.heading)
+            CompassNeedleETE(angle: compass.heading)
                 .frame(width: 150, height: 150)
         }
     }
 }
 
-struct CompassNeedle: View {
+struct CompassNeedleETE: View {
     let angle: Double
     
     var body: some View {
         ZStack {
-            Circle()
-                .stroke(Color.gray, lineWidth: 2)
-                .frame(width: 140, height: 140)
+            //            Circle()
+            //                .stroke(Color.gray, lineWidth: 2)
+            //                .frame(width: 140, height: 140)
             
             Rectangle()
                 .fill(Color.red)
-                .frame(width: 4, height: 60)
-                .offset(y: -30)
+                .frame(width: 4, height: 200)
+            //                .offset(y: -30)
                 .rotationEffect(.degrees(angle))
         }
+        .frame(maxWidth: .infinity) //extend fully across screen
+        .ignoresSafeArea()//ignore safe area constraints
+        .clipped()
     }
 }
 
 #Preview {
-    CompassView()
+    CompassViewETE()
 }
