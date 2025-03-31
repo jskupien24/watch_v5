@@ -71,7 +71,7 @@ struct selectDive: View{
                     .frame(maxWidth: .infinity, alignment: .center)
                 List {
                     ForEach(dives){ dive in
-                        NavigationLink(destination: DiveMetricsView().environmentObject(manager)){
+                        NavigationLink(destination:DiveContainerView() /*DiveMetricsView(*/.environmentObject(manager)){
                             Button(action: {
                                 // Handle the button tap here
                                 print(dive.name)

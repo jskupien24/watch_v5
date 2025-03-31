@@ -4,14 +4,16 @@
 //
 //  Created by Faith Chernowski on 10/29/24.
 //
+// Further edited and built out by Jack Skupien on 03/31/25
 
 import SwiftUI
 
 
 struct DiveMetricsView: View {
+    @EnvironmentObject var manager: HealthManager
     @State private var depth = "72 ft"
     @State private var waterTemp = "82°F"
-    @State private var heartRate = "76 BPM"
+//    @State private var heartRate = "76 BPM"
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer?
     @State private var startTime: Date?
@@ -44,9 +46,10 @@ struct DiveMetricsView: View {
         ScrollView {
             VStack {
                 // Dive Metrics Section
-                Text("Dive Computer")
-                    .font(.caption)
-                    .padding(.top, 4)
+//                Text("Dive Computer")
+//                    .font(.caption)
+//                    .padding(.top, -20)
+//                    .padding(.bottom, 20)
 
                 HStack {
                     VStack {
@@ -55,7 +58,7 @@ struct DiveMetricsView: View {
                         Text(depth)
                             .font(.title2)
                             .bold()
-                    }
+                    }.padding(.trailing, 25)
                     VStack {
                         Text("Temp")
                             .font(.caption2)
@@ -64,19 +67,25 @@ struct DiveMetricsView: View {
                             .bold()
                     }
                 }
-                .padding(.vertical, 4)
-
-                Text("Heart Rate: \(heartRate)")
-                    .font(.body)
-                    .padding(.vertical, 2)
-
+                HStack{
+                    VStack {
+                        Text("Heart Rate")
+                            .font(.caption2)
+                        Text("\(Int(manager.heartRate))")
+                            .font(.title2)
+                            .bold()
+                    }
+                    .padding(.vertical, 4)
+                }
+//                Text("Heart Rate: \(Int(manager.heartRate))")
+//                    .font(.body)
+//                    .padding(.vertical, 2)
                 Text("Dive Time: \(formattedTime)")
                     .font(.body)
                     .padding(.bottom, 4)
-
                 // Compass Section
-                ModularCompassView()
-                    .padding(.top, 50)
+//                ModularCompassView()
+//                    .padding(.top, 50)
             }
             .onAppear {
                 startTimer()
@@ -84,11 +93,10 @@ struct DiveMetricsView: View {
             .onDisappear {
                 timer?.invalidate()
             }
-            .padding()
         }
     }
 }
 
 #Preview {
-    DiveMetricsView()
+    DiveMetricsView().environmentObject(HealthManager())
 }
