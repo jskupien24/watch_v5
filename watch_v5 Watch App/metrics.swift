@@ -4,7 +4,9 @@
 //
 //  Created by Faith Chernowski on 10/29/24.
 //
+
 import SwiftUI
+
 
 struct DiveMetricsView: View {
     @State private var depth = "72 ft"
@@ -13,7 +15,7 @@ struct DiveMetricsView: View {
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer?
     @State private var startTime: Date?
-    @State private var isRunning = true  // Automatically start the timer
+    @State private var isRunning = true
 
     var formattedTime: String {
         let minutes = Int(elapsedTime) / 60
@@ -21,9 +23,9 @@ struct DiveMetricsView: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
 
-    // Automatically start the timer when the view appears
+    
     func startTimer() {
-        startTime = Date().addingTimeInterval(-elapsedTime) // Continue from last elapsed time
+        startTime = Date().addingTimeInterval(-elapsedTime)
         isRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             if let startTime = startTime {
@@ -39,44 +41,51 @@ struct DiveMetricsView: View {
     }
 
     var body: some View {
-        VStack {
-            Text("Dive Computer")
-                .font(.caption)
-                .padding(.top, 4)
+        ScrollView {
+            VStack {
+                // Dive Metrics Section
+                Text("Dive Computer")
+                    .font(.caption)
+                    .padding(.top, 4)
 
-            HStack {
-                VStack {
-                    Text("Depth")
-                        .font(.caption2)
-                    Text(depth)
-                        .font(.title2)
-                        .bold()
+                HStack {
+                    VStack {
+                        Text("Depth")
+                            .font(.caption2)
+                        Text(depth)
+                            .font(.title2)
+                            .bold()
+                    }
+                    VStack {
+                        Text("Temp")
+                            .font(.caption2)
+                        Text(waterTemp)
+                            .font(.title2)
+                            .bold()
+                    }
                 }
-                VStack {
-                    Text("Temp")
-                        .font(.caption2)
-                    Text(waterTemp)
-                        .font(.title2)
-                        .bold()
-                }
+                .padding(.vertical, 4)
+
+                Text("Heart Rate: \(heartRate)")
+                    .font(.body)
+                    .padding(.vertical, 2)
+
+                Text("Dive Time: \(formattedTime)")
+                    .font(.body)
+                    .padding(.bottom, 4)
+
+                // Compass Section
+                ModularCompassView()
+                    .padding(.top, 50)
             }
-            .padding(.vertical, 4)
-
-            Text("Heart Rate: \(heartRate)")
-                .font(.body)
-                .padding(.vertical, 2)
-
-            Text("Dive Time: \(formattedTime)")
-                .font(.body)
-                .padding(.bottom, 4)
+            .onAppear {
+                startTimer()
+            }
+            .onDisappear {
+                timer?.invalidate()
+            }
+            .padding()
         }
-        .onAppear {
-            startTimer()  // Start the timer as soon as the view appears
-        }
-        .onDisappear {
-            timer?.invalidate()  // Stop the timer when the view disappears
-        }
-        .padding()
     }
 }
 

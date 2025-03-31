@@ -71,7 +71,7 @@ struct selectDive: View{
                     .frame(maxWidth: .infinity, alignment: .center)
                 List {
                     ForEach(dives){ dive in
-                        NavigationLink(destination: WorkoutPage2().environmentObject(manager)){
+                        NavigationLink(destination: DiveMetricsView().environmentObject(manager)){
                             Button(action: {
                                 // Handle the button tap here
                                 print(dive.name)
