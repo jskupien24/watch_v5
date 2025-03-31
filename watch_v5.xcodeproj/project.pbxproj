@@ -629,7 +629,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Access to health data";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.jackskupien.watch-v5";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -660,7 +659,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Access to health data";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.jackskupien.watch-v5";
 				LD_RUNPATH_SEARCH_PATHS = (

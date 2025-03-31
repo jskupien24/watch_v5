@@ -5,6 +5,8 @@
 //  Created by Jack Skupien on 2/3/25.
 //
 
+import FirebaseDatabase
+import FirebaseAuth
 import SwiftUI
 
 // Extended Dive model with more properties
@@ -81,6 +83,38 @@ struct NewDiveView: View {
             time: p_diveTime,
             o2Percentage: Double(p_pctOxygen)
         )
+    }
+    
+    
+    
+    func convertDiveToDict(dive: Dive) -> [String: Any] {
+        let dateFormatter = ISO8601DateFormatter()
+        var newp_dcModel = "Naui"
+        if dive.p_dcModel == Model.Naui{
+            newp_dcModel = "Naui"
+        }
+        else{
+            newp_dcModel = "Padi"
+        }
+        var newp_sGroup = ".A"
+        var newp_eGroup = ".A"
+                
+        return [
+            "id": dive.id.uuidString,
+            "date": dateFormatter.string(from: dive.date),
+            "location": dive.location,
+            "p_depth": dive.p_depth,
+            "p_diveTime": dive.p_diveTime,
+            "p_pctOxygen": dive.p_pctOxygen,
+            "p_dcModel": newp_dcModel,
+            "p_sGroup": newp_sGroup,
+            "p_eGroup": newp_eGroup,
+            "bottomTime": dive.bottomTime,
+            "p_startPressure": dive.p_startPressure,
+            "p_temp": dive.p_temp,
+            "p_condNotes": dive.p_condNotes,
+            "notes": dive.notes
+        ]
     }
     
 //    func getThermalRecommendation(temp: Double, diveTime: Double) -> Int {
@@ -426,28 +460,35 @@ struct NewDiveView: View {
                         }
                     } else {
                         Button("Save") {
-                            let newDive = Dive(
-                                //basic
-                                date: date,
-                                location: location,
-                                //o
-                                p_depth: p_depth,
-                                p_diveTime: p_diveTime,
-                                p_pctOxygen: p_pctOxygen,
-                                //d
-                                p_dcModel: p_dcModel,
-                                p_sGroup: p_sGroup,
-                                p_eGroup: p_eGroup,
-                                //i
-                                //g
-                                //t
-                                bottomTime: bottomTime,
-                                p_startPressure: p_startPressure,
-                                p_temp: p_temp,
-                                p_condNotes: p_condNotes,
-                                notes: notes
-                            )
-                            dives.append(newDive)
+                            let ref = Database.database().reference()
+                            if let userID = Auth.auth().currentUser?.uid {
+                                let newDive = Dive(
+                                    date: date,
+                                    location: location,
+                                    p_depth: p_depth,
+                                    p_diveTime: p_diveTime,
+                                    p_pctOxygen: p_pctOxygen,
+                                    p_dcModel: p_dcModel,
+                                    p_sGroup: p_sGroup,
+                                    p_eGroup: p_eGroup,
+                                    bottomTime: bottomTime,
+                                    p_startPressure: p_startPressure,
+                                    p_temp: p_temp,
+                                    p_condNotes: p_condNotes,
+                                    notes: notes
+                                )
+
+                                let firebaseInfo = convertDiveToDict(dive: newDive)
+                                
+                                ref.child("users").child(userID).child("dives").child(newDive.id.uuidString).setValue(firebaseInfo) { error, _ in
+                                    if let error = error {
+                                        print("Error saving dive: \(error.localizedDescription)")
+                                    } else {
+                                        print("Dive saved successfully!")
+                                        dives.append(newDive)
+                                    }
+                                }
+                            }
                             dismiss()
                         }
                         .disabled(location.isEmpty)
@@ -488,9 +529,10 @@ struct DiveRow: View {
 
 // MyDivesView.swift
 struct MyDivesView: View {
-    @State private var dives: [Dive] = []
     @State private var showingNewDiveSheet = false
     @State private var isEditing = false
+    @StateObject private var authViewModel = AuthViewModel()
+    @State private var dives: [Dive] = []
     
     var body: some View {
         NavigationView {
@@ -503,6 +545,7 @@ struct MyDivesView: View {
                     )
                 } else {
                     List {
+//                        fetchDives()
                         ForEach(dives) { dive in
                             DiveRow(dive: dive)
                         }
@@ -526,12 +569,90 @@ struct MyDivesView: View {
             .sheet(isPresented: $showingNewDiveSheet) {
                 NewDiveView(dives: $dives)
             }
+            .onAppear(){
+                fetchDives()
+            }
+            
+        }
+    }
+    func fetchDives() {
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("users").child(userID).child("dives")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            var loadedDives: [Dive] = []
+            for child in snapshot.children {
+                let id = snapshot.key
+                if let childSnapshot = child as? DataSnapshot,
+                   let diveData = childSnapshot.value as? [String: Any],
+                   
+                   
+                   let dateString = diveData["date"] as? String,
+                   let date = ISO8601DateFormatter().date(from: dateString),
+//                   let id = diveData["id"] as? String,
+                   let location = diveData["location"] as? String,
+                   let p_depth = diveData["p_depth"] as? Double,
+                   let p_diveTime = diveData["p_diveTime"] as? Double,
+                   let p_pctOxygen = diveData["p_pctOxygen"] as? Double,
+                   let bottomTime = diveData["bottomTime"] as? Int,
+                   let p_startPressure = diveData["p_startPressure"] as? Double,
+                   let p_temp = diveData["p_temp"] as? Double,
+                   let p_condNotes = diveData["p_condNotes"] as? String,
+                   let notes = diveData["notes"] as? String {
+                    
+                    let p_dcModel = (diveData["p_dcModel"] as? String) == "Naui" ? NewDiveView.Model.Naui : NewDiveView.Model.PADI
+                    let p_sGroup = NewDiveView.Group(rawValue: diveData["p_sGroup"] as? String ?? "A") ?? .A
+                    let p_eGroup = NewDiveView.Group(rawValue: diveData["p_eGroup"] as? String ?? "A") ?? .A
+                    print("Fetched dive data:", diveData)
+                    let dive = Dive(
+//                        id: UUID(uuidString: childSnapshot.key) ?? UUID(),
+                        date: date,
+                        location: location,
+                        p_depth: p_depth,
+                        p_diveTime: p_diveTime,
+                        p_pctOxygen: p_pctOxygen,
+                        p_dcModel: p_dcModel,
+                        p_sGroup: p_sGroup,
+                        p_eGroup: p_eGroup,
+                        bottomTime: bottomTime,
+                        p_startPressure: p_startPressure,
+                        p_temp: p_temp,
+                        p_condNotes: p_condNotes,
+                        notes: notes
+                    )
+                    loadedDives.append(dive)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.dives = loadedDives
+            }
         }
     }
     
+  
     private func deleteDives(at offsets: IndexSet) {
+        let divesToDelete = offsets.map { dives[$0] }
+
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+
+        let ref = Database.database().reference()
+        
+        for dive in divesToDelete {
+            print("Fetched dive data:", dive)
+            print("Deleting dive with ID: \(dive.id)")
+            ref.child("users").child(userID).child("dives").child(dive.id.uuidString).removeValue { error, _ in
+                if let error = error {
+                    print("Error deleting dive from Firebase: \(error.localizedDescription)")
+                } else {
+                    print("Dive successfully deleted from Firebase")
+                }
+            }
+        }
+        
         dives.remove(atOffsets: offsets)
+        
     }
+    
 }
 
 #Preview {
