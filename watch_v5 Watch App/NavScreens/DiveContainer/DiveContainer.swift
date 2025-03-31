@@ -17,6 +17,7 @@ struct DiveContainerView: View {
             ModularCompassView().tag(1)
         }
         .tabViewStyle(.carousel)//swap pages with digital crown
+        .navigationBarBackButtonHidden(true)
     }
 }
 

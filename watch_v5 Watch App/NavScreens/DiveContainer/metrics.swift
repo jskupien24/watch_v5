@@ -11,6 +11,8 @@ import SwiftUI
 
 struct DiveMetricsView: View {
     @EnvironmentObject var manager: HealthManager
+    @StateObject private var compass = CompassManager()
+    
     @State private var depth = "72 ft"
     @State private var waterTemp = "82°F"
 //    @State private var heartRate = "76 BPM"
@@ -20,16 +22,20 @@ struct DiveMetricsView: View {
     @State private var isRunning = true
 
     var formattedTime: String {
-        let minutes = Int(elapsedTime) / 60
+        let hours = Int(elapsedTime) / 3600
+        let minutes = (Int(elapsedTime) % 3600) / 60
         let seconds = Int(elapsedTime) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
+        let milliseconds = Int((elapsedTime - floor(elapsedTime)) * 10) // Extract ms
+
+        return String(format: "%02d:%02d:%02d.%d", hours, minutes, seconds, milliseconds)
     }
 
     
     func startTimer() {
         startTime = Date().addingTimeInterval(-elapsedTime)
         isRunning = true
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             if let startTime = startTime {
                 elapsedTime = Date().timeIntervalSince(startTime)
             }
@@ -45,47 +51,60 @@ struct DiveMetricsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                // Dive Metrics Section
-//                Text("Dive Computer")
-//                    .font(.caption)
-//                    .padding(.top, -20)
-//                    .padding(.bottom, 20)
-
+                Text("Dive Time")
+                    .font(.caption2)
+                    .foregroundColor(.accent)
+                    .padding(.top,-8)
+                Text("\(formattedTime)")
+                    .font(.title3)
+                    .padding(.bottom, 4)
+                    .monospaced()
                 HStack {
                     VStack {
-                        Text("Depth")
-                            .font(.caption2)
-                        Text(depth)
-                            .font(.title2)
-                            .bold()
-                    }.padding(.trailing, 25)
+//                        Text("Heart Rate")
+//                            .font(.caption2)
+                        HStack{
+                                Image(systemName: "suit.heart")
+                                    .foregroundStyle(.accent)
+                                    .symbolEffect(.pulse)
+                                    .padding(.leading,-10)
+                            Text("\(Int(manager.heartRate))")
+                                .font(.title2)
+                                .bold()
+                        }
+                    }
+                    .padding(.trailing, 35)
                     VStack {
                         Text("Temp")
                             .font(.caption2)
+                            .foregroundColor(.accent)
                         Text(waterTemp)
                             .font(.title2)
                             .bold()
-                    }
+                    }.padding(.trailing,0)
                 }
                 HStack{
                     VStack {
-                        Text("Heart Rate")
+                        Text("Depth")
                             .font(.caption2)
-                        Text("\(Int(manager.heartRate))")
+                            .foregroundColor(.accent)
+                        Text(depth)
                             .font(.title2)
                             .bold()
                     }
-                    .padding(.vertical, 4)
-                }
-//                Text("Heart Rate: \(Int(manager.heartRate))")
-//                    .font(.body)
-//                    .padding(.vertical, 2)
-                Text("Dive Time: \(formattedTime)")
-                    .font(.body)
-                    .padding(.bottom, 4)
-                // Compass Section
-//                ModularCompassView()
-//                    .padding(.top, 50)
+                    .padding(.trailing, 25)
+                    VStack {
+                        Text("Heading")
+                            .font(.caption2)
+                            .foregroundColor(.accent)
+                        HStack{
+                            Text("\(Int(compass.heading))º\(compass.direction)")
+                                .font(.title2)
+                                .bold()
+//                                .strikethrough()
+                        }
+                    }
+                }.padding(.vertical, 4)
             }
             .onAppear {
                 startTimer()
