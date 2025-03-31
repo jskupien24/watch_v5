@@ -1,57 +1,110 @@
-////
-////  startDive.swift
-////  watch_v5
-////      emulates the "start workout" page that              Apple Watch typically uses and                 switches to DiveContainer
-////  Created by Jack Skupien on 3/31/25.
-////
 //
-//import SwiftUI
+//  startDive.swift
+//  watch_v5
+//      emulates the "start workout" page that              Apple Watch typically uses and                 switches to DiveContainer
+//  Created by Jack Skupien on 3/31/25.
 //
-//struct StartDiveView: View {
-//    @State private var isCountingDown = false
-//    @State private var countdown = 3
-//    @State private var showDiveView = false
-//    
-//    var body: some View {
-//        Group {
-//            if showDiveView {
-//                DiveMetricsContainerView() // After countdown, show main dive view
-//            } else {
-//                VStack {
-//                    if isCountingDown {
-//                        Text("\(countdown)")
-//                            .font(.system(size: 80, weight: .bold))
-//                            .transition(.scale)
-//                            .onAppear(perform: startCountdown)
-//                    } else {
-//                        Button(action: {
-//                            isCountingDown = true
-//                        }) {
-//                            Text("Start Dive")
-//                                .font(.title2)
-//                                .padding()
-//                                .background(Circle().fill(Color.blue).frame(width: 120, height: 120))
-//                                .foregroundColor(.white)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        .animation(.easeInOut, value: countdown)
-//    }
-//    
-//    func startCountdown() {
-//        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-//            if countdown > 1 {
-//                countdown -= 1
-//            } else {
-//                timer.invalidate()
-//                showDiveView = true
-//            }
-//        }
-//    }
-//}
-//
-//#Preview {
-//    StartDiveView()
-//}
+
+import SwiftUI
+
+struct StartDiveView: View {
+    @EnvironmentObject var manager: HealthManager
+    @State private var isCountingDown = false
+    @State private var countdown: Int = 3
+    @State private var showDiveView = false
+    @State private var scaleEffect: CGFloat = 1.0
+    @State private var opacity: CGFloat = 1.0
+
+    var body: some View {
+        Group {
+            if showDiveView {
+                DiveContainerView().environmentObject(manager) // Show dive view after countdown
+            } else {
+                VStack {
+                    if isCountingDown {
+                        CountdownView(countdown: countdown, scaleEffect: scaleEffect, opacity: opacity)
+                            .onAppear(perform: startCountdown)
+                    } else {
+                        Text("Reef Dive #1")
+                            .font(.title2)
+                            .fontWeight(.thin)
+                            .padding(.bottom, 25)
+                            .padding(.leading, -30)
+
+                        Button(action: {
+                            isCountingDown = true
+                        }) {
+                            Text("Start Dive")
+                                .padding()
+                                .foregroundColor(.white)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+            }
+        }
+    }
+    
+    func startCountdown() {
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            if countdown > 0 {
+                withAnimation(.bouncy(duration: 0.3)) {
+                        scaleEffect = 1.5
+                        opacity = 1
+                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        withAnimation(.easeOut(duration: 0.3)) {
+                                scaleEffect = 1.0
+                                opacity = 0.5
+                            }
+                    }
+                countdown -= 1
+            } else {
+                timer.invalidate()
+                showDiveView = true
+            }
+        }
+    }
+}
+
+struct CountdownView: View {
+    var countdown: Int
+    var scaleEffect: CGFloat
+    var opacity: CGFloat
+
+    var body: some View {
+        ZStack {
+            if(countdown>0){
+                Text("\(countdown)")
+                    .font(.system(size: 50, weight: .bold))
+                    .foregroundColor(.white)
+                    .scaleEffect(scaleEffect)
+                    .opacity(opacity)
+            } else {
+                Text("Go!")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.white)
+                    .scaleEffect(scaleEffect)
+                    .opacity(opacity)
+            }
+            Circle()
+                .stroke(lineWidth: 15)
+                .foregroundColor(.gray.opacity(0.5))
+                .padding(10)
+            
+            Circle()
+                .trim(from: 0, to: CGFloat(countdown) / 3.0)
+                .stroke(style: StrokeStyle(lineWidth: 13, lineCap: .round, lineJoin: .round))
+                .rotation(Angle(degrees: -90))
+                .foregroundColor(.green)
+                .padding(10)
+                .animation(.easeInOut(duration: 0.3), value: countdown) // Smooth circle update
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black.edgesIgnoringSafeArea(.all))
+    }
+}
+
+#Preview {
+    StartDiveView().environmentObject(HealthManager())
+}
