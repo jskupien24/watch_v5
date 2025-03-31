@@ -46,7 +46,7 @@ struct LogIn: View {
                     }}
                 }) {
                     Text("Submit")
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: 300)
                         .padding()
                         .foregroundColor(.white)
                         .background(Color.blue)
