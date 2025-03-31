@@ -22,13 +22,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct watch_v5App: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-//    let databaseRef = Database.database().reference()
-
+    @StateObject private var authViewModel = AuthViewModel()
     
     var body: some Scene {
-        
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(authViewModel)
         }
     }
 }
+

@@ -15,7 +15,10 @@ struct Dive: Identifiable {
 var dives = [Dive(name: "Planned Dives"),
              Dive(name: "Unplanned Dive"),
              Dive(name: "Snorkel"),
-             Dive(name:"Free Dive")]
+             Dive(name: "Free Dive")]
+
+var comp = Dive(name: "Compass")
+var modComp = Dive (name: "Modular Compass")
 
 struct FadeView: View {
     @State private var showSplash = true
@@ -59,13 +62,15 @@ struct selectDive: View{
         NavigationStack{
             VStack(alignment: .leading) {
                 Text("Select a Dive")
-                    .font(.body)
+                    .font(.title3)
                     .fontWeight(.bold)
+//                    .foregroundStyle(.accent)
                     .multilineTextAlignment(.center)
-                    .padding(.top, -15)
+//                    .padding(.top, -15)
+                    .padding(EdgeInsets(top: -8, leading: 0, bottom:10, trailing: 0))
                     .frame(maxWidth: .infinity, alignment: .center)
                 List {
-                    ForEach(dives){dive in
+                    ForEach(dives){ dive in
                         NavigationLink(destination: WorkoutPage2().environmentObject(manager)){
                             Button(action: {
                                 // Handle the button tap here
@@ -78,6 +83,30 @@ struct selectDive: View{
                             }
                         }
                     }
+                    //compass button
+                    NavigationLink(destination: CompassView()){
+                        Button(action: {
+                            // Handle the button tap here
+                            print(comp.name)
+                        }) {
+                            Text(comp.name)
+                                .padding()
+                                .foregroundColor(.accentColor) // Change color if you like
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
+                    }
+                    //mod compass button
+                    NavigationLink(destination: ModularCompassView()){
+                        Button(action: {
+                            // Handle the button tap here
+                            print(modComp.name)
+                        }) {
+                            Text(modComp.name)
+                                .padding()
+                                .foregroundColor(.accentColor) // Change color if you like
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
+                    }
                 }
             }
         }
@@ -85,7 +114,7 @@ struct selectDive: View{
 }
     struct FadeView_Previews: PreviewProvider {
         static var previews: some View {
-            FadeView()
+            ContentView().environmentObject(HealthManager())
         }
     }
 
