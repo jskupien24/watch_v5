@@ -1,0 +1,47 @@
+//
+//  Connectivity.swift
+//  watch_v5
+//
+//  Created by Fort Hunter on 4/2/25.
+//
+import WatchConnectivity
+
+class WatchConnectivityHelper: NSObject, WCSessionDelegate {
+    
+    static let shared = WatchConnectivityHelper()  // Singleton to access this class easily
+    
+    override init() {
+        super.init()
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+    }
+    
+    // Function to send user info from iPhone to Watch
+    func sendUserInfoToWatch(userInfo: [String: Any]) {
+        WCSession.default.transferUserInfo(userInfo)
+        print("User info sent from iPhone to Watch.")
+    }
+    
+    // Handle incoming user info from Watch
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        print("Received user info from Watch: \(userInfo)")
+    }
+    
+    // Handle session activation
+    func session(_ session: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {
+        if let error = error {
+            print("Session activation failed: \(error.localizedDescription)")
+        } else {
+            print("Session activated successfully with state: \(state.rawValue)")
+        }
+    }
+
+    // Required delegate methods (empty if not needed)
+    func sessionDidBecomeInactive(_ session: WCSession) {}
+    func sessionDidDeactivate(_ session: WCSession) {
+        WCSession.default.activate()
+    }
+}

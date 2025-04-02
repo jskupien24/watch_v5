@@ -486,6 +486,8 @@ struct NewDiveView: View {
                                     } else {
                                         print("Dive saved successfully!")
                                         dives.append(newDive)
+                                        let userInfo: [String: Any] = ["username": "FortHunter", "score": 100]
+                                                WatchConnectivityHelper.shared.sendUserInfoToWatch(userInfo: userInfo)
                                     }
                                 }
                             }
@@ -581,7 +583,6 @@ struct MyDivesView: View {
         ref.observeSingleEvent(of: .value) { snapshot in
             var loadedDives: [Dive] = []
             for child in snapshot.children {
-                let id = snapshot.key
                 if let childSnapshot = child as? DataSnapshot,
                    let diveData = childSnapshot.value as? [String: Any],
                    
