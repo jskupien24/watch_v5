@@ -53,11 +53,11 @@ struct DiveMetricsView: View {
             //show heading at top
             Image(systemName: "arrowtriangle.up.fill")
                 .foregroundStyle(.accent)
-                .padding(EdgeInsets(top: -55, leading:0, bottom: 10, trailing:0))
+                .padding(EdgeInsets(top: -45, leading:0, bottom: 10, trailing:0))
             Text("\(Int(compass.heading))º\(compass.direction)")
                 .font(.title3)
                 .bold()
-                .padding(EdgeInsets(top: -45, leading:0, bottom: 10, trailing:0))
+                .padding(EdgeInsets(top: -35, leading:0, bottom: 10, trailing:0))
             
             VStack {//all 3 rows of title-data pairs
                 //dive time row
