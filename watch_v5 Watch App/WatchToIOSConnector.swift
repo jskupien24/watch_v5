@@ -26,7 +26,9 @@ class WatchToIOSConnector: NSObject, WCSessionDelegate, ObservableObject{
                 "Test": "working"
             ]
             
-            session.sendMessage(data, replyHandler: nil)
+            session.sendMessage(data, replyHandler: nil){ error in
+                print(error.localizedDescription)
+            }
         }
         else{
             print("Session is not reachable")
