@@ -18,7 +18,7 @@ class WatchConnector: NSObject, WCSessionDelegate, ObservableObject{
         session.activate()
     }
     
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         
     }
     
@@ -31,7 +31,9 @@ class WatchConnector: NSObject, WCSessionDelegate, ObservableObject{
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String: Any]){
+        print("Before")
         print(message)
+        print("After")
     }
     
 }
