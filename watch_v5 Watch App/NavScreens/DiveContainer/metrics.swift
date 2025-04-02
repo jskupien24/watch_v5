@@ -50,7 +50,8 @@ struct DiveMetricsView: View {
 
     var body: some View {
         ScrollView {
-            VStack {
+            VStack {//all 3 rows of title-data pairs
+                //dive time row
                 Text("Dive Time")
                     .font(.caption2)
                     .foregroundColor(.accent)
@@ -59,10 +60,10 @@ struct DiveMetricsView: View {
                     .font(.title3)
                     .padding(.bottom, 4)
                     .monospaced()
-                HStack{
-                    VStack{
+                HStack{//right and left columns
+                    VStack{//left column
                         Text(" ").font(.caption2)
-                        HStack {
+                        HStack {//heart icon and rate
                             Image(systemName: "suit.heart")
                                 .foregroundStyle(.accent)
                                 .symbolEffect(.pulse)
@@ -72,7 +73,7 @@ struct DiveMetricsView: View {
                                 .bold()
                         }
 //                            .padding(.trailing, 35)
-                        VStack {
+                        VStack {//depth
                             Text("Depth")
                                 .font(.caption2)
                                 .foregroundColor(.accent)
@@ -82,8 +83,8 @@ struct DiveMetricsView: View {
                         }
 //                        .padding(.trailing, 25)
                     }
-                    VStack{
-                        VStack {
+                    VStack{//right column
+                        VStack {//temp
                             Text("Temp")
                                 .font(.caption2)
                                 .foregroundColor(.accent)
@@ -92,7 +93,7 @@ struct DiveMetricsView: View {
                                 .bold()
                         }
 //                        .padding(.trailing,0)
-                        VStack {
+                        VStack {//heading
                             Text("Heading")
                                 .font(.caption2)
                                 .foregroundColor(.accent)
