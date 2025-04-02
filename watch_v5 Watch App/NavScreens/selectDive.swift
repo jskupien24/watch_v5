@@ -58,6 +58,11 @@ struct SplashView: View {
 
 struct selectDive: View{
     @EnvironmentObject var manager: HealthManager
+    @StateObject var watchConnector = WatchToIOSConnector()
+    
+    func sendToPhone(){
+        watchConnector.sendDataToPhone()
+    }
     var body: some View{
         NavigationStack{
             VStack(alignment: .leading) {
@@ -73,6 +78,7 @@ struct selectDive: View{
                     ForEach(dives){ dive in
                         NavigationLink(destination:/*DiveContainerView()*/StartDiveView().environmentObject(manager)){
                             Button(action: {
+                                sendToPhone()
                                 // Handle the button tap here
                                 print(dive.name)
                             }) {

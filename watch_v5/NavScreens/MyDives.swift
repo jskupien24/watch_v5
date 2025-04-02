@@ -486,8 +486,6 @@ struct NewDiveView: View {
                                     } else {
                                         print("Dive saved successfully!")
                                         dives.append(newDive)
-                                        let userInfo: [String: Any] = ["username": "FortHunter", "score": 100]
-                                                WatchConnectivityHelper.shared.sendUserInfoToWatch(userInfo: userInfo)
                                     }
                                 }
                             }
