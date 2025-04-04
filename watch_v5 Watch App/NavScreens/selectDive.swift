@@ -60,11 +60,11 @@ struct SplashView: View {
 
 struct selectDive: View{
     @EnvironmentObject var manager: HealthManager
-    @StateObject var watchConnector = WatchToIOSConnector()
+//    @StateObject var watchConnector = WatchToIOSConnector()
     
-    func sendToPhone(){
-        watchConnector.sendDataToPhone()
-    }
+//    func sendToPhone(){
+//        watchConnector.sendDataToPhone()
+//    }
     var body: some View{
         NavigationStack{
             VStack(alignment: .leading) {
@@ -80,7 +80,6 @@ struct selectDive: View{
                     ForEach(dives){ dive in
                         NavigationLink(destination:/*DiveContainerView()*/StartDiveView().environmentObject(manager)){
                             Button(action: {
-                                sendToPhone()
                                 // Handle the button tap here
                                 print(dive.name)
                             }) {
@@ -115,25 +114,26 @@ struct selectDive: View{
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
-                    Button(action: sendToPhone) {
-                                        Text("Send Test Message")
-                                            .font(.headline)
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .background(Color.blue)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(10)
-                                    }
-                                    .padding(.horizontal)
-                                    .padding(.top, 10)
+//                    Button(action: sendToPhone) {
+//                                        Text("Send Test Message")
+//                                            .font(.headline)
+//                                            .padding()
+//                                            .frame(maxWidth: .infinity)
+//                                            .background(Color.blue)
+//                                            .foregroundColor(.white)
+//                                            .cornerRadius(10)
+//                                    }
+//                                    .padding(.horizontal)
+//                                    .padding(.top, 10)
                 }
             }
         }
     }
 }
-    struct FadeView_Previews: PreviewProvider {
-        static var previews: some View {
-            ContentView().environmentObject(HealthManager())
-        }
+
+struct FadeView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView().environmentObject(HealthManager())
     }
+}
 
