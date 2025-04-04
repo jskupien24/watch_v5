@@ -20,6 +20,8 @@ var dives = [Dive(name: "Planned Dives"),
 var comp = Dive(name: "Compass")
 var modComp = Dive (name: "Modular Compass")
 
+var tmp=Dive(name: "send to phone")
+
 struct FadeView: View {
     @State private var showSplash = true
 
@@ -90,7 +92,7 @@ struct selectDive: View{
                         }
                     }
                     //compass button
-                    NavigationLink(destination: CompassView()){
+                    NavigationLink(destination: CompassView2()){
                         Button(action: {
                             // Handle the button tap here
                             print(comp.name)
@@ -113,6 +115,17 @@ struct selectDive: View{
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
+                    Button(action: sendToPhone) {
+                                        Text("Send Test Message")
+                                            .font(.headline)
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
+                                    }
+                                    .padding(.horizontal)
+                                    .padding(.top, 10)
                 }
             }
         }

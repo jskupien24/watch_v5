@@ -16,24 +16,25 @@ class WatchConnector: NSObject, WCSessionDelegate, ObservableObject{
         super.init()
         session.delegate = self
         session.activate()
+        print("init")
     }
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        
+        print("session")
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {
-        
+        print("became inactive")
     }
     
     func sessionDidDeactivate(_ session: WCSession) {
-        
+        print("Did deactivate")
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String: Any]){
-        print("Before")
+        print("Before3")
         print(message)
-        print("After")
+        print("After3")
     }
     
 }
