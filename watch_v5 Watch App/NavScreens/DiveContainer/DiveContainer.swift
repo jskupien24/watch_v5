@@ -1,9 +1,6 @@
 //  DiveContainer.swift
 //  watch_v5
-//      This is a container that is displayed while diving. it holds
-//          multiple screens that can be scrolled between.
-//      It also begins a workout and turns on waterlock to ignore touch
-//          input while underwater
+//      This is a container that is displayed while diving. it holds multiple screens that can be scrolled between. It also begins a workout and turns on waterlock to ignore touch input while underwater
 //  Created by Jack Skupien on 3/31/25.
 
 import SwiftUI
@@ -29,26 +26,30 @@ struct DiveContainerView: View {
         
         .onAppear {
             print("DiveContainerView appeared — starting workout")
-            manager.startDiveWorkout()
+            manager.startDiveWorkout{
+                print("water lock enabled immediately after workout started.")
+                WKInterfaceDevice.current().enableWaterLock()
+            }
             print("after start workout")
         }
         
-        .onChange(of: manager.workoutStarted) { isRunning, _ in
-            if isRunning {
-                WKInterfaceDevice.current().enableWaterLock()
-                print("Water Lock enabled after workout started.")
-            }
-        }
-        
-        .onChange(of: scenePhase) { newPhase, _ in
-            print("ScenePhase changed: \(newPhase)")
-//            if newPhase == .active {
-//                // Assume water lock has been turned off manually
-//                print("App became active — assuming Water Lock was disabled")
-//                manager.endWorkout()
-//                dismiss()
+//        .onChange(of: manager.workoutStarted) { isRunning, _ in
+//            print("DiveContainer: Workout started changed: \(isRunning)")
+//            if isRunning {
+//                WKInterfaceDevice.current().enableWaterLock()
+//                print("Water Lock enabled after workout started.")
 //            }
-        }
+//        }
+//        
+//        .onChange(of: scenePhase) { newPhase, _ in
+//            print("ScenePhase changed: \(newPhase)")
+////            if newPhase == .active {
+////                // Assume water lock has been turned off manually
+////                print("App became active — assuming Water Lock was disabled")
+////                manager.endWorkout()
+////                dismiss()
+////            }
+//        }
     }
 }
 

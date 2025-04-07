@@ -82,18 +82,18 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
     }
     
     //vvWORKOUT SESSION CODEvv
-    func startDiveWorkout() {
+    func startDiveWorkout(completion: @escaping () -> Void) {
         guard workoutSession == nil else {
             print("Workout session already exists.")
             return
         }
-        //check for workout permission
+        //check for workout permissionw
         let status = healthStore.authorizationStatus(for: HKObjectType.workoutType())
         print("Workout permission status: \(status.rawValue)")
 
         let configuration = HKWorkoutConfiguration()
         configuration.activityType = .other
-        configuration.locationType = .unknown // <- safer for now
+        configuration.locationType = .indoor//previously .unknown
 
         do {
             workoutSession = try HKWorkoutSession(healthStore: healthStore, configuration: configuration)
@@ -102,15 +102,28 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
 
             workoutSession?.delegate = self
             builder?.delegate = self
-
-            workoutSession?.startActivity(with: Date())
             builder?.beginCollection(withStart: Date()) { success, error in
-                if let error = error {
-                    print("beginCollection failed: \(error.localizedDescription)")
+                if success {
+                    self.workoutSession?.startActivity(with: Date())
+                    DispatchQueue.main.async {
+                        self.workoutStarted = true
+                        print("Workout builder collection started.")
+                        completion()//triggers waterlock?
+                    }
                 } else {
-                    print("Workout builder collection started.")
+                    print("beginCollection failed: \(error?.localizedDescription ?? "Unknown error")")
                 }
             }
+            
+//            workoutSession?.startActivity(with: Date())
+
+//            builder?.beginCollection(withStart: Date()) { success, error in
+//                if let error = error {
+//                    print("beginCollection failed: \(error.localizedDescription)")
+//                } else {
+//                    print("Workout builder collection started.")
+//                }
+//            }
 
         } catch {
             print("Failed to start workout: \(error.localizedDescription)")
@@ -121,7 +134,8 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
         print("Workout state changed: \(toState.rawValue)")
         
         DispatchQueue.main.async {
-            self.workoutStarted = (toState == .running)
+            self.workoutStarted = true
+            print("HealthManager: Workout Started (true)")
         }
         
         if toState == .ended {
