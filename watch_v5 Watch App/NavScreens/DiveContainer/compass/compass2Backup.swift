@@ -1,14 +1,7 @@
 ////
-////  compass2Backup.swift
-////  watch_v5
-////
-////  Created by Jack Skupien on 4/3/25.
-////
-//
-////
 ////  Untitled.swift
 ////  watch_v5
-////
+////  SEE LINE 14 BEFORE BUILDING OR TESTING-- THE CANVAS'S Y OFFSET IS NOT THE SAME AS THE WATCH'S Y OFFSET
 ////  Created by Jack Skupien on 4/03/25 (adapted from 3/03/25 version).
 ////
 //
@@ -18,8 +11,16 @@
 //    @StateObject private var compass = CompassManager()
 //    
 //    var body: some View {
+//        let t=true//set to true if testing, false if building
 //        ZStack {
-//            CompassNeedle2(angle: compass.heading)
+//            //uncomment below block to see white edge safespace
+//            /*
+//            if(t){
+//                Color.white
+//                    .edgesIgnoringSafeArea(.all)
+//            }
+//             */
+//            CompassNeedle2(angle: compass.heading,testing: t)
 //                .edgesIgnoringSafeArea(.all)
 //                .frame(width: .infinity, height: .infinity)
 //    //            .ignoresSafeArea()
@@ -30,83 +31,93 @@
 //
 //struct CompassNeedle2: View {
 //    let angle: Double
+//    let testing: Bool
 //    
 //    var body: some View {
+//        //testing bool
+//        let vOffset=(testing ? -8.25 : -3.5)
+//        //direction line constants
 //        let lineWidth=2.0
+//        let lineHeight=300.0
+//        //center cover constants
+//        let frameWidth=176.5//previously 183.0
+//        let frameHeight=222.0
+//        let frameCRadius=41.0//previously 40.0
 //        ZStack {
-//            //NNE and SSW line
+//            //octal directions
+//            //NNE/SSW line
 //            Rectangle()
-//                .fill(Color.gray.opacity(0.5))
-//                .frame(width: lineWidth-1.5, height: 250)
+//                .fill(Color.accent.opacity(0.5))
+//                .frame(width: lineWidth-1, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle+22.5))
-//            //ENE and ESE line
+//                .rotationEffect(.degrees(-1*(angle+22.5)))
+//            //ESE/WNW line
 //            Rectangle()
-//                .fill(Color.gray.opacity(0.5))
-//                .frame(width: lineWidth-1.5, height: 250)
+//                .fill(Color.accent.opacity(0.5))
+//                .frame(width: lineWidth-1, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle+67.5))
-//            //NE and SW line
+//                .rotationEffect(.degrees(-1*(angle+112.5)))
+//            //ESE/WSW line
 //            Rectangle()
-//                .fill(Color.gray.opacity(0.5))
-//                .frame(width: lineWidth-1.5, height: 250)
+//                .fill(Color.accent.opacity(0.5))
+//                .frame(width: lineWidth-1, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle+112.5))
-//            //NW and SE line
+//                .rotationEffect(.degrees(-1*(angle+157.5)))
+//            //SSE/NNE line
 //            Rectangle()
-//                .fill(Color.gray.opacity(0.5))
-//                .frame(width: lineWidth-1.5, height: 250)
+//                .fill(Color.accent.opacity(0.5))
+//                .frame(width: lineWidth-1, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle+157.5))
-//            //rectangle covering quadrantals
-//            RoundedRectangle(cornerRadius: 75)
+//                .rotationEffect(.degrees(-1*(angle+67.5)))
+//            //rectangle covering octals
+//            RoundedRectangle(cornerRadius: frameCRadius+12)
 //                .fill(.black)
-//                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-//                .frame(width: 195, height: 235)
+////                .stroke(Color.accent.opacity(0.25), lineWidth: 1)
+//                .frame(width: frameWidth+22, height: frameHeight+22)
 //            
 //            //quadrantal directions
-//            //NE and SW line
+//            //NE/SW line
 //            Rectangle()
-//                .fill(Color.gray)
-//                .frame(width: lineWidth-1, height: 250)
+//                .fill(Color.accent.opacity(0.5))
+//                .frame(width: lineWidth-0.5, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle+45))
-//            //NW and SE line
+//                .rotationEffect(.degrees(-1*(angle+45)))
+//            //SE/NW line
 //            Rectangle()
-//                .fill(Color.gray)
-//                .frame(width: lineWidth-1, height: 250)
+//                .fill(Color.accent.opacity(0.5))
+//                .frame(width: lineWidth-0.5, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle+135))
-//            
-//            //rectangle covering quadrantals
-//            RoundedRectangle(cornerRadius: 72.5)
+//                .rotationEffect(.degrees(-1*(angle+135)))
+//            //rectangle covering cardinals
+//            RoundedRectangle(cornerRadius: frameCRadius+5)
 //                .fill(.black)
-//                .stroke(Color.gray.opacity(0.25), lineWidth: 1)
-//                .frame(width: 187.5, height: 227.5)
+////                .stroke(Color.accent.opacity(0.25), lineWidth: 1)
+//                .frame(width: frameWidth+11, height: frameHeight+11)
+//            
 //            
 //            //cardinal directions
 //            //North and south line
 //            Rectangle()
-//                .fill(Color.accent)
-//                .frame(width: lineWidth, height: 250)
+//                .fill(Color.accent.opacity(1))
+//                .frame(width: lineWidth, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle))
+//                .rotationEffect(.degrees(-1*angle))
 //            //east and west line
 //            Rectangle()
-//                .fill(Color.accent)
-//                .frame(width: lineWidth, height: 250)
+//                .fill(Color.accent.opacity(1))
+//                .frame(width: lineWidth, height: lineHeight)
 //                .offset(y:0)
-//                .rotationEffect(.degrees(angle+90))
-//            
+//                .rotationEffect(.degrees(-1*angle+90))
 //            //rectangle covering cardinals
-//            RoundedRectangle(cornerRadius: 70)
+//            RoundedRectangle(cornerRadius: frameCRadius)
 //                .fill(.black)
-//                .stroke(Color.accent.opacity(0.25), lineWidth: 1)
-//                .frame(width: 180, height: 220)
+////                .stroke(Color.accent.opacity(0.25), lineWidth: 1)
+//                .frame(width: frameWidth, height: frameHeight)
 //        }
 //        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // Extend fully
+//        .offset(y:vOffset)
 //        .edgesIgnoringSafeArea(.all)
-////                    .offset(x: -3) // Slight shift to center correctly
+//
 ////            .clipped()
 //        .navigationBarBackButtonHidden(true)
 //    }

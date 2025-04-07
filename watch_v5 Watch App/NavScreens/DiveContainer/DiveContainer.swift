@@ -22,7 +22,7 @@ struct DiveContainerView: View {
     var body: some View{
         TabView{
             //page 1: Metrics
-            DiveMetricsView().environmentObject(manager).tag(0)
+            DiveView().environmentObject(manager).tag(0)
             
             //page 2: Modular Compass
             ModularCompassView().tag(1)

@@ -14,12 +14,12 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
     //for heart rate
     let healthStore=HKHealthStore()
     @Published var heartRate: Double = 0.0//stores the latest heart rate
-    
+
     //for workout session
     var workoutSession: HKWorkoutSession?
     var builder: HKLiveWorkoutBuilder?
     @Published var workoutStarted = false
-    
+
     override init(){
         super.init()
         let hr=HKQuantityType(.heartRate)
@@ -37,7 +37,7 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
             }
         }
     }
-    
+
     func startHeartRateUpdates(){
         let heartRateType=HKObjectType.quantityType(forIdentifier: .heartRate)!
         let query=HKAnchoredObjectQuery(
@@ -57,13 +57,13 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
     private func handleHeartRateSamples(_ samples: [HKSample]?) {
         guard let quantitySamples = samples as? [HKQuantitySample],
               let latestSample = quantitySamples.last else { return }
-        
+
         DispatchQueue.main.async {
             self.heartRate = latestSample.quantity.doubleValue(for: HKUnit(from: "count/min"))
         }
     }
-    
-    
+
+
     //vvWORKOUT SESSION CODEvv
     private func resetWorkoutSession() {
         workoutSession = nil
@@ -80,16 +80,16 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
         //check for workout permissionw
         let status = healthStore.authorizationStatus(for: HKObjectType.workoutType())
         print("Workout permission status: \(status.rawValue)")
-        
+
         let configuration = HKWorkoutConfiguration()
         configuration.activityType = .other
         configuration.locationType = .indoor//previously .unknown
-        
+
         do {
             workoutSession = try HKWorkoutSession(healthStore: healthStore, configuration: configuration)
             builder = workoutSession?.associatedWorkoutBuilder()
             builder?.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: configuration)
-            
+
             workoutSession?.delegate = self
             builder?.delegate = self
             builder?.beginCollection(withStart: Date()) { success, error in
@@ -112,7 +112,7 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
             resetWorkoutSession()
         }
     }
-    
+
     func workoutSession(_ workoutSession: HKWorkoutSession, didChangeTo toState: HKWorkoutSessionState,
                             from fromState: HKWorkoutSessionState, date: Date) {
         print("Workout state changed: \(toState.rawValue)")
@@ -132,7 +132,7 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
                 return
             }
             self.hasFinishedWorkout = true
-            
+
             // Proceed only if the session state is really ended
             if workoutSession.state == .ended, let builder = builder {
                 builder.endCollection(withEnd: Date()) { success, error in
@@ -173,7 +173,7 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
         }
     }
 
-    
+
     func workoutSession(_ workoutSession: HKWorkoutSession, didFailWithError error: Error) {
         print("Workout session failed: \(error.localizedDescription)")
         // Clean up on failure
@@ -182,23 +182,23 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
             self.resetWorkoutSession()
         }
     }
-    
+
     func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
         //logic to handle new data
     }
-    
+
     func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {
         //Called when events (like pauses/resumes) are recorded
     }
-    
+
     func endWorkout() {
         print("Ending workout session...")
-        
+
         guard let session = workoutSession else {
             print("No active session to end.")
             return
         }
-        
+
         // Only end the session if it hasn't been ended already
         if session.state == .ended || session.state == .notStarted {
             print("Workout session already ended or not started.")
