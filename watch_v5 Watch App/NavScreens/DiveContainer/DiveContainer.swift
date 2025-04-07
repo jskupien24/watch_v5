@@ -13,12 +13,18 @@ struct DiveContainerView: View {
     //for water lock/exiting the dive computer
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
+    
+    //the below variables are for checking when you turn the water lock off
+    @State private var waterLockPreviouslyEnabled = false
+    @State private var waterLockTimer: Timer?
+    @State private var shouldEnableWaterLock = false
+    
     var body: some View{
         TabView{
-            //Page 1: Metrics
+            //page 1: Metrics
             DiveMetricsView().environmentObject(manager).tag(0)
             
-            //Page 2: Modular Compass
+            //page 2: Modular Compass
             ModularCompassView().tag(1)
         }
         .tabViewStyle(.carousel)//swap pages with digital crown
@@ -26,33 +32,87 @@ struct DiveContainerView: View {
         
         .onAppear {
             print("DiveContainerView appeared — starting workout")
-            manager.startDiveWorkout{
-                print("water lock enabled immediately after workout started.")
-                WKInterfaceDevice.current().enableWaterLock()
+            manager.startDiveWorkout {
+                print("Workout started, will enable water lock soon")
+                //set flag to water lock
+                self.shouldEnableWaterLock = true
             }
             print("after start workout")
         }
         
-//        .onChange(of: manager.workoutStarted) { isRunning, _ in
-//            print("DiveContainer: Workout started changed: \(isRunning)")
-//            if isRunning {
-//                WKInterfaceDevice.current().enableWaterLock()
-//                print("Water Lock enabled after workout started.")
-//            }
-//        }
-//        
-//        .onChange(of: scenePhase) { newPhase, _ in
-//            print("ScenePhase changed: \(newPhase)")
-////            if newPhase == .active {
-////                // Assume water lock has been turned off manually
-////                print("App became active — assuming Water Lock was disabled")
-////                manager.endWorkout()
-////                dismiss()
-////            }
-//        }
+        //when workout starts
+        .onChange(of: manager.workoutStarted) { _, isStarted in
+            if isStarted && shouldEnableWaterLock {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    print("Enabling water lock now that workout is running")
+                    WKInterfaceDevice.current().enableWaterLock()
+                    
+                    //reset flag
+                    shouldEnableWaterLock = false
+                    //check WL status after delay
+                    checkWaterLockStatusAfterDelay()
+                }
+            }
+        }
+    }
+    
+    //check water lock status after a delay to allow system to update
+    private func checkWaterLockStatusAfterDelay() {
+        //wait to check water lock status
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            if WKInterfaceDevice.current().isWaterLockEnabled {
+                print("Water lock confirmed enabled")
+                waterLockPreviouslyEnabled = true
+                startWaterLockMonitoring()
+            } else {
+                print("Water lock status check: not enabled yet, will try again")
+                //try again with a longer delay just in case
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    let isLocked = WKInterfaceDevice.current().isWaterLockEnabled
+                    print("Final water lock status check: \(isLocked ? "enabled" : "not enabled")")
+                    
+                    //even if it reports not enabled, we'll still monitor for changes since the UI might show it as locked anyway
+                    waterLockPreviouslyEnabled = isLocked
+                    startWaterLockMonitoring()
+                }
+            }
+        }
+    }
+    
+    //water lock monitoring
+    private func startWaterLockMonitoring() {
+        print("Starting water lock monitoring")
+        
+        //clear existing timers
+        waterLockTimer?.invalidate()
+        waterLockTimer = nil
+        
+        //start timer to check both API and manual detection
+        waterLockTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            let isLocked = WKInterfaceDevice.current().isWaterLockEnabled
+            
+            //check for unlock every 5 seconds
+            if Int(Date().timeIntervalSince1970)%5==0{
+                print("Water lock status: \(isLocked ? "locked" : "unlocked")")
+            }
+            
+            //end workout if previously locked and now unlocked
+            if waterLockPreviouslyEnabled && !isLocked {
+                print("Water Lock was turned off manually")
+                waterLockTimer?.invalidate()
+                waterLockTimer=nil
+                manager.endWorkout()
+                dismiss()
+            }
+            
+            //if from unlocked to locked: update our tracking
+            if !waterLockPreviouslyEnabled&&isLocked{
+                print("Water lock was just enabled")
+            }
+            waterLockPreviouslyEnabled=isLocked
+        }
     }
 }
-
 
 #Preview {
     DiveContainerView().environmentObject(HealthManager())
