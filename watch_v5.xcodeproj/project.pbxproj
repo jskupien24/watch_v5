@@ -75,16 +75,6 @@
 		F057B88A2C9DEEDB00106259 /* watch_v5 Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "watch_v5 Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F085CC0A2DA4696C00811DB0 /* Exceptions for "watch_v5 Watch App" folder in "watch_v5 Watch App" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"watch-v5-Watch-App-Info.plist",
-			);
-			target = F057B86D2C9DEEDA00106259 /* watch_v5 Watch App */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F057B84A2C9DEED800106259 /* watch_v5 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -103,9 +93,6 @@
 		};
 		F057B8722C9DEEDA00106259 /* watch_v5 Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				F085CC0A2DA4696C00811DB0 /* Exceptions for "watch_v5 Watch App" folder in "watch_v5 Watch App" target */,
-			);
 			path = "watch_v5 Watch App";
 			sourceTree = "<group>";
 		};
@@ -654,12 +641,9 @@
 				DEVELOPMENT_TEAM = FATH79KY4N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "watch-v5-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses Health Data to collect your heart rate during your dives.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app records workout data during your dive";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Access to health data";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For Navigation and Compass";
-				INFOPLIST_KEY_NSMotionUsageDescription = "this app uses submersion data to track depth and water temperature";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.jackskupien.watch-v5";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -690,12 +674,9 @@
 				DEVELOPMENT_TEAM = FATH79KY4N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "watch-v5-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses Health Data to collect your heart rate during your dives.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app records workout data during your dive";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Access to health data";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For Navigation and Compass";
-				INFOPLIST_KEY_NSMotionUsageDescription = "this app uses submersion data to track depth and water temperature";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.jackskupien.watch-v5";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -720,7 +701,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = watch_v5/watch_v5.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"watch_v5/Preview Content\"";
@@ -730,8 +710,6 @@
 				INFOPLIST_FILE = "watch-v5-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses HealthKit to track your heart rate during dives and log dives as workouts";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app logs dives as workouts";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location Services";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -764,7 +742,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = watch_v5/watch_v5.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"watch_v5/Preview Content\"";
@@ -774,8 +751,6 @@
 				INFOPLIST_FILE = "watch-v5-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses HealthKit to track your heart rate during dives and log dives as workouts";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app logs dives as workouts";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location Services";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
