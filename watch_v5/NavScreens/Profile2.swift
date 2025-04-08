@@ -111,6 +111,7 @@ struct ProfileView2: View {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: {
                                 showingSettings = true
+                                print("what")
                                 
                             }) {
                                 Image(systemName: "gear")
@@ -120,7 +121,7 @@ struct ProfileView2: View {
                         }
                         
                     }
-                    .navigationDestination(isPresented: $showingSettings) {
+                    .sheet(isPresented: $showingSettings) {
                         SettingsView()
                     }
                 }
