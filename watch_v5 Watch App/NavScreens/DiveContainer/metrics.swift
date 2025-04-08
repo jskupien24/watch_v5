@@ -18,7 +18,6 @@ struct DiveView: View {
                 .navigationBarBackButtonHidden(true)
                 .offset(y: 15)
                 .scaleEffect(0.95)
-//                .controlSize(<#T##controlSize: ControlSize##ControlSize#>)
         }
     }
 }
@@ -132,8 +131,7 @@ struct DiveMetricsView: View {
                         }
                     }.padding(.vertical,1)
                 }.padding()
-//                .frame(/*minWidth: 100, */maxWidth: .infinity, alignment: .trailing)
-            }.frame(/*maxWidth: .infinity, */alignment: .center) // Extend fully
+            }.frame(/*maxWidth: .infinity, */alignment: .center)
         }
         .onAppear {
             startTimer()
