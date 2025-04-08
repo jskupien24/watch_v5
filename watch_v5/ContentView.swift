@@ -14,34 +14,42 @@ import FirebaseDatabase
 
 struct ContentView: View {
     @StateObject private var authViewModel = AuthViewModel()
+    @State private var isLoggedIn = true
     @State private var selectedTab = 0
     var body: some View {
-        VStack {
-            //assign tabs
-            if selectedTab == 0 {
-                DiveSiteFeedView()
-            } else if selectedTab == 1 {
-                MyDivesView()
-            } else if selectedTab == 2 {
-                DiveFeed()
-            } else {
-                ProfileView2()
+        Group{
+            if authViewModel.isAuthenticated {
+                VStack {
+                    //assign tabs
+                    if selectedTab == 0 {
+                        DiveSiteFeedView()
+                    } else if selectedTab == 1 {
+                        MyDivesView()
+                    } else if selectedTab == 2 {
+                        DiveFeed()
+                    } else {
+                        ProfileView2()
+                    }
+                    
+                    //show tab bar at bottom
+                    HStack {
+                        TabButton(title: "Home", icon: "house.fill", index: 0, selectedTab: $selectedTab)
+                            .padding(EdgeInsets(top: 50, leading: 10, bottom:0, trailing: 20))
+                        TabButton(title: "My Dives", icon: "water.waves", index: 1, selectedTab: $selectedTab)
+                            .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 20))
+                        TabButton(title: "Feed", icon: "list.number", index: 2, selectedTab: $selectedTab)
+                            .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 20))
+                        TabButton(title: "Profile", icon: "person.fill", index: 3, selectedTab: $selectedTab)
+                            .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 10))
+                    }
+                    .background(Color.white)
+                }
+                .navigationBarBackButtonHidden(true)
+            } else{
+                LogIn()
+                    .environmentObject(authViewModel)
             }
-            
-            //show tab bar at bottom
-            HStack {
-                TabButton(title: "Home", icon: "house.fill", index: 0, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 50, leading: 10, bottom:0, trailing: 20))
-                TabButton(title: "My Dives", icon: "water.waves", index: 1, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 20))
-                TabButton(title: "Feed", icon: "list.number", index: 2, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 20))
-                TabButton(title: "Profile", icon: "person.fill", index: 3, selectedTab: $selectedTab)
-                    .padding(EdgeInsets(top: 50, leading: 20, bottom:0, trailing: 10))
-            }
-            .background(Color.white)
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -77,6 +85,7 @@ struct TabButton: View {
 
 //preview
 struct ContentView_Previews: PreviewProvider {
+    @StateObject private var authViewModel = AuthViewModel()
     static var previews: some View {
         ContentView()
     }
