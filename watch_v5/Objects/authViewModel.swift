@@ -92,4 +92,19 @@ class AuthViewModel: ObservableObject {
             self.userData = [:]
         }
     }
+    
+    func changeBio(bio: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let bioRef = databaseRef.child("users").child(uid).child("bio")
+        bioRef.setValue(bio) { error, _ in
+            if let error = error {
+                print("Error updating bio: \(error.localizedDescription)")
+            } else {
+                DispatchQueue.main.async {
+                    self.userData["bio"] = bio
+                }
+            }
+        }
+    }
 }
