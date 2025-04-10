@@ -85,6 +85,18 @@ struct ProfileView2: View {
                             .cornerRadius(12)
                             .shadow(radius: 3)
                             .padding(.horizontal)
+                            // Link to Activities Page
+                            NavigationLink(destination: ActivitiesPage()) {
+                                Text("View All Dive Activities")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(12)
+                                    .padding(.horizontal)
+                            }
+
                             
                             // Certifications Section
                             VStack(alignment: .leading, spacing: 10) {
@@ -131,6 +143,7 @@ struct ProfileView2: View {
         }
     }
 }
+
 
 // Custom Dive Stat Card Component
 struct DiveStatCard: View {
