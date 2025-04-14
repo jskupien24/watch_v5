@@ -69,7 +69,7 @@ struct CompassBar: View {
                 .padding(.bottom,5)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .center) // Extend fully
+        .frame(maxWidth: 500, alignment: .center) // Extend fully
         .offset(x: -3) // Slight shift to center correctly
         .clipped() // Ensure no extra space
     }

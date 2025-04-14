@@ -11,7 +11,7 @@ struct CompassView2: View {
     @StateObject private var compass = CompassManager()
     
     var body: some View {
-        let t=true//set to true if testing, false if building
+        let t=false//set to true if testing, false if building
         ZStack {
             //uncomment below block to see white edge safespace
             /*
@@ -43,29 +43,32 @@ struct CompassNeedle2: View {
         let frameWidth=176.5//previously 183.0
         let frameHeight=222.0
         let frameCRadius=41.0//previously 40.0
+        let octalOpacity=0.5
+        let quadrantalOpacity=0.75
+        let cardinalOpacity=1.0
         ZStack {
             //octal directions
             //NNE/SSW line
             Rectangle()
-                .fill(Color.accent.opacity(0.5))
+                .fill(Color.accent.opacity(octalOpacity))
                 .frame(width: lineWidth-1, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*(angle+22.5)))
             //ESE/WNW line
             Rectangle()
-                .fill(Color.accent.opacity(0.5))
+                .fill(Color.accent.opacity(octalOpacity))
                 .frame(width: lineWidth-1, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*(angle+112.5)))
             //ESE/WSW line
             Rectangle()
-                .fill(Color.accent.opacity(0.5))
+                .fill(Color.accent.opacity(octalOpacity))
                 .frame(width: lineWidth-1, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*(angle+157.5)))
             //SSE/NNE line
             Rectangle()
-                .fill(Color.accent.opacity(0.5))
+                .fill(Color.accent.opacity(octalOpacity))
                 .frame(width: lineWidth-1, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*(angle+67.5)))
@@ -78,13 +81,13 @@ struct CompassNeedle2: View {
             //quadrantal directions
             //NE/SW line
             Rectangle()
-                .fill(Color.accent.opacity(0.5))
+                .fill(Color.accent.opacity(quadrantalOpacity))
                 .frame(width: lineWidth-0.5, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*(angle+45)))
             //SE/NW line
             Rectangle()
-                .fill(Color.accent.opacity(0.5))
+                .fill(Color.accent.opacity(quadrantalOpacity))
                 .frame(width: lineWidth-0.5, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*(angle+135)))
@@ -98,13 +101,13 @@ struct CompassNeedle2: View {
             //cardinal directions
             //North and south line
             Rectangle()
-                .fill(Color.accent.opacity(1))
+                .fill(Color.accent.opacity(cardinalOpacity))
                 .frame(width: lineWidth, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*angle))
             //east and west line
             Rectangle()
-                .fill(Color.accent.opacity(1))
+                .fill(Color.accent.opacity(cardinalOpacity))
                 .frame(width: lineWidth, height: lineHeight)
                 .offset(y:0)
                 .rotationEffect(.degrees(-1*angle+90))
@@ -114,12 +117,12 @@ struct CompassNeedle2: View {
 //                .stroke(Color.accent.opacity(0.25), lineWidth: 1)
                 .frame(width: frameWidth, height: frameHeight)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // Extend fully
+        .frame(maxWidth: 500/*.infinity*/, maxHeight: 500/*.infinity*/, alignment: .center) // Extend fully
         .offset(y:vOffset)
         .edgesIgnoringSafeArea(.all)
-
-//            .clipped()
-        .navigationBarBackButtonHidden(true)
+        .clipped()
+//        .fixedSize()
+//        .navigationBarBackButtonHidden(true)
     }
 }
 

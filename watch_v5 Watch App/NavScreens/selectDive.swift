@@ -90,30 +90,30 @@ struct selectDive: View{
                             }
                         }
                     }
-                    //compass button
-                    NavigationLink(destination: CompassView2()){
-                        Button(action: {
-                            // Handle the button tap here
-                            print(comp.name)
-                        }) {
-                            Text(comp.name)
-                                .padding()
-                                .foregroundColor(.accentColor) // Change color if you like
-                                .frame(maxWidth: .infinity, alignment: .center)
-                        }
-                    }
-                    //mod compass button
-                    NavigationLink(destination: ModularCompassView()){
-                        Button(action: {
-                            // Handle the button tap here
-                            print(modComp.name)
-                        }) {
-                            Text(modComp.name)
-                                .padding()
-                                .foregroundColor(.accentColor) // Change color if you like
-                                .frame(maxWidth: .infinity, alignment: .center)
-                        }
-                    }
+//                    //compass button
+//                    NavigationLink(destination: CompassView2()){
+//                        Button(action: {
+//                            // Handle the button tap here
+//                            print(comp.name)
+//                        }) {
+//                            Text(comp.name)
+//                                .padding()
+//                                .foregroundColor(.accentColor) // Change color if you like
+//                                .frame(maxWidth: .infinity, alignment: .center)
+//                        }
+//                    }
+//                    //mod compass button
+//                    NavigationLink(destination: ModularCompassView()){
+//                        Button(action: {
+//                            // Handle the button tap here
+//                            print(modComp.name)
+//                        }) {
+//                            Text(modComp.name)
+//                                .padding()
+//                                .foregroundColor(.accentColor) // Change color if you like
+//                                .frame(maxWidth: .infinity, alignment: .center)
+//                        }
+//                    }
                 }
             }
         }
