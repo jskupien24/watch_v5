@@ -33,27 +33,19 @@ class WatchToIOSConnector: NSObject, WCSessionDelegate, ObservableObject{
         }
     
     
-    func sendDataToPhone(){
-        
+    func sendDataToPhone(data: [String: Any]){
         if WCSession.default.activationState != .activated {
             print("WCSession is not activated yet.")
             return
         }
         
         if session.isReachable {
-            print("before before")
-            let data: [String: Any] = [
-                "fats": "5", "date": "2023-12-24, 23:18:27 +0000",
-                "createdAt": "2023-10-24 22:18:44 +0000", "food":
-                "soup", "carbs": "15", "protein":
-                "3"
-            ]
-            print("before")
+            print("Sending Dive data")
+            
             session.sendMessage(data, replyHandler: nil){ error in
-                print("here")
+                print("error senind dive data")
                 print(error.localizedDescription)
             }
-            print("after")
         }
         else{
             print("Session is not reachable")

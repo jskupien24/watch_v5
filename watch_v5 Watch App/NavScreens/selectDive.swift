@@ -63,7 +63,7 @@ struct selectDive: View{
     @StateObject var watchConnector = WatchToIOSConnector()
     
     func sendToPhone(){
-        watchConnector.sendDataToPhone()
+//        watchConnector.sendDataToPhone()
     }
     var body: some View{
         NavigationStack{
@@ -114,17 +114,6 @@ struct selectDive: View{
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
-                    Button(action: sendToPhone) {
-                                        Text("Send Test Message")
-                                            .font(.headline)
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .background(Color.blue)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(10)
-                                    }
-                                    .padding(.horizontal)
-                                    .padding(.top, 10)
                 }
             }
         }
