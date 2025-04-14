@@ -102,6 +102,7 @@ struct DiveContainerView: View {
                 waterLockTimer?.invalidate()
                 waterLockTimer=nil
                 manager.endWorkout()
+                //We need to grab data here and then send it to the phone, functions should already be set up just need to figure out what data we can actually get
                 dismiss()
             }
             

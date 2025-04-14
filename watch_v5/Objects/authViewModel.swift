@@ -107,4 +107,35 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
+    func saveDiveLogEntry(_ entry: DiveLogEntry) {
+        guard let uid = user?.uid else {
+            print("User not authenticated")
+            return
+        }
+
+        let entryId = entry.id.uuidString
+        let coordinatesData = entry.coordinates.map { ["latitude": $0.coordinate.latitude, "longitude": $0.coordinate.longitude] }
+
+        let diveData: [String: Any] = [
+            "date": entry.date,
+            "duration": entry.duration,
+            "routeOverview": entry.routeOverview,
+            "maxDepth": entry.maxDepth,
+            "averageHR": entry.averageHR,
+            "averageSpeed": entry.averageSpeed,
+            "oxygenUsed": entry.oxygenUsed,
+            "depthData": entry.depthData,
+            "heartRateData": entry.heartRateData,
+            "coordinates": coordinatesData
+        ]
+
+        databaseRef.child("users").child(uid).child("diveLogs").child(entryId).setValue(diveData) { error, _ in
+            if let error = error {
+                print("Error saving dive log: \(error.localizedDescription)")
+            } else {
+                print("Dive log saved successfully.")
+            }
+        }
+    }
+    
 }

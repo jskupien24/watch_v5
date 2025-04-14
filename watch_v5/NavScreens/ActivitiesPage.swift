@@ -12,7 +12,7 @@ struct DiveLogCoordinate: Identifiable {
 }
 
 struct DiveLogEntry: Identifiable {
-    let id = UUID()
+    let id: UUID
     let date: String
     let duration: String
     let routeOverview: String
@@ -28,6 +28,7 @@ struct DiveLogEntry: Identifiable {
 struct ActivitiesPage: View {
     let completedDives: [DiveLogEntry] = [
         DiveLogEntry(
+            id: UUID(),
             date: "Apr 1, 2025",
             duration: "45m",
             routeOverview: "Coral Garden - Cozumel",
@@ -44,6 +45,7 @@ struct ActivitiesPage: View {
             ]
         ),
         DiveLogEntry(
+            id: UUID(),
             date: "Mar 20, 2025",
             duration: "38m",
             routeOverview: "Shark Alley - Belize",
