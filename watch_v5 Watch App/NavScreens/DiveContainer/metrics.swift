@@ -28,11 +28,12 @@ struct DiveMetricsView: View {
     
     @State private var depth = "72 ft"
     @State private var waterTemp = "82°F"
-//    @State private var heartRate = "76 BPM"
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer?
     @State private var startTime: Date?
     @State private var isRunning = true
+    
+    let totalDiveTime: TimeInterval = 10 * 60 // 10 minutes in seconds
     
     //grid spacing
     let columnPadding = 2.0
@@ -46,7 +47,6 @@ struct DiveMetricsView: View {
 
         return String(format: "%02d:%02d:%02d.%d", hours, minutes, seconds, milliseconds)
     }
-
     
     func startTimer() {
         startTime = Date().addingTimeInterval(-elapsedTime)
@@ -64,64 +64,37 @@ struct DiveMetricsView: View {
         elapsedTime = 0
         startTime = nil
     }
+    
+    //elapsed time out of total
+    var progress: Double {
+        min(elapsedTime / totalDiveTime, 1.0)
+    }
 
     var body: some View {
         VStack {//all 4 rows of title-data pairs
-            //show heading at top
-            Image(systemName: "arrowtriangle.up.fill")
-                .foregroundStyle(.accent)
-                .padding(EdgeInsets(top: -45, leading:0, bottom: 10, trailing:0))
-                .scaleEffect(1.1)
-            Text("\(Int(compass.heading))º\(compass.direction)")
-                .font(.title3)
-                .bold()
-                .padding(EdgeInsets(top: -35, leading:0, bottom: 12, trailing:0))
-            //dive time row
-            Text("Dive Time")
-                .font(.caption2)
-                .foregroundColor(.accent)
-                .padding(.top,-8)
-            Text("\(formattedTime)")
-                .font(.title3)
-                .padding(.bottom,0)
-                .monospaced()
-                .scaleEffect(1.15)
-            HStack(alignment: .firstTextBaseline){//right and left columns
-                //LEFT COLUMN
+            
+            //HEADING AND ARROW
+            HeadingView()
+            
+            //STOPWATCH
+            DiveStopWatch(formattedTime: formattedTime,progress: progress)
+                .padding(0)
+            
+            //GRID
+            HStack(alignment: .firstTextBaseline){
+                //left column
                 VStack{
-                    VStack{
-                        Text(" ").font(.caption2)
-                        HStack(alignment: .center) {//heart icon and rate
-                            Image(systemName: "suit.heart")
-                                .foregroundStyle(.accent)
-                                .symbolEffect(.pulse)
-                                .padding(.leading,-10)
-                            Text("\(Int(manager.heartRate))")
-                                .font(.title2)
-                                .bold()
-                        }
-                    }
-//                    Spacer()
-                    VStack {//depth
-                        Text("Depth")
-                            .font(.caption2)
-                            .foregroundColor(.accent)
-                        Text(depth)
-                            .font(.title2)
-                            .bold()
-                    }.padding(.vertical,1)
+                    //HEART RATE
+                    HRView()
+                    //DEPTH
+                    DepthView()
                 }.padding(.trailing, columnPadding)
-//                .frame(maxWidth: .infinity, alignment: .leading)
+                
                 //RIGHT COLUMN
                 VStack{
-                    VStack {//temp
-                        Text("Temp")
-                            .font(.caption2)
-                            .foregroundColor(.accent)
-                        Text(waterTemp)
-                            .font(.title2)
-                            .bold()
-                    }/*.padding()*/
+                    //TEMPERATURE
+                    TempView()
+                    //HEADING
                     VStack {//heading
                         Text("Heading")
                             .font(.caption2)
@@ -138,6 +111,111 @@ struct DiveMetricsView: View {
         }
         .onDisappear {
             timer?.invalidate()
+        }
+    }
+}
+
+
+
+//heading and arrow
+struct HeadingView: View {
+    @StateObject private var compass = CompassManager()
+    var body: some View {
+        VStack{
+            //show heading at top
+            Image(systemName: "arrowtriangle.up.fill")
+                .foregroundStyle(.accent)
+                .padding(EdgeInsets(top: -45, leading:0, bottom: 10, trailing:0))
+                .scaleEffect(1.1)
+            Text("\(Int(0/*compass.heading*/))º\("N"/*compass.direction*/)")
+                .font(.title3)
+                .bold()
+                .padding(EdgeInsets(top: -35, leading:0, bottom: 12, trailing:0))
+        }
+    }
+}
+
+struct DiveStopWatch: View {
+    var formattedTime: String
+    var progress: Double//val from 0.0 to 1.0
+    
+    var body: some View {
+        VStack{
+            //STOPWATCH ROW
+            Text("Dive Time")
+                .font(.caption2)
+                .foregroundColor(.accent)
+                .padding(.top,-8)
+            Text("\(formattedTime)")
+                .font(.title3)
+                .padding(.bottom,0)
+                .monospaced()
+                .scaleEffect(1.15)
+            ZStack{
+                ProgressView(value: progress)
+                    .progressViewStyle(.linear)
+                    .tint(.accent)
+                    .scaleEffect(x: 0.67, y: 0.5, anchor: .center)
+    //                .padding([.leading, .trailing], 30)
+                Rectangle()
+                    .frame(width:2,height:7)
+                    .offset(x: -24)
+                    .foregroundColor(.black)
+                Rectangle()
+                    .frame(width:2,height:7)
+                    .offset(x: 24)
+                    .foregroundColor(.black)
+            }
+        }
+    }
+}
+
+//heart rate
+struct HRView: View {
+    @EnvironmentObject var manager: HealthManager
+    var body: some View {
+        VStack{
+            Text(" ").font(.caption2)
+            HStack(alignment: .center) {//heart icon and rate
+                Image(systemName: "suit.heart")
+                    .foregroundStyle(.accent)
+                    .symbolEffect(.pulse)
+                    .padding(.leading,-10)
+                Text("\(Int(manager.heartRate))")
+                    .font(.title2)
+                    .bold()
+            }
+        }
+    }
+}
+
+//depth view
+struct DepthView: View {
+    private var depth="72 ft"
+    var body: some View {
+        VStack {//depth
+            Text("Depth")
+                .font(.caption2)
+                .foregroundColor(.accent)
+            Text(depth)
+                .font(.title2)
+                .bold()
+        }.padding(.vertical,1)
+    }
+}
+
+
+//water temperature
+struct TempView: View {
+    @State var waterTemp: String = "83ºF"
+    var body: some View {
+        VStack {//temp
+            Text("Temp")
+                .font(.caption2)
+                .foregroundColor(.accent)
+            Text(waterTemp)
+                .font(.title2)
+                .bold()
         }
     }
 }

@@ -14,7 +14,7 @@ struct StartDiveView: View {
     @State private var showDiveView = false
     @State private var scaleEffect: CGFloat = 1.0
     @State private var opacity: CGFloat = 1.0
-
+    
     var body: some View {
         Group {
             if showDiveView {
