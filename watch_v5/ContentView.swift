@@ -13,6 +13,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 struct ContentView: View {
+    let connector = WatchConnector()
     @StateObject private var authViewModel = AuthViewModel()
     @State private var isLoggedIn = true
     @State private var selectedTab = 0

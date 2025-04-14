@@ -641,9 +641,12 @@
 				DEVELOPMENT_TEAM = FATH79KY4N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "watch-v5-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Access to health data";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "this app records workout data";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For Navigation and Compass";
+				INFOPLIST_KEY_NSMotionUsageDescription = "This app uses motion data to track depth";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.jackskupien.watch-v5";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -674,9 +677,12 @@
 				DEVELOPMENT_TEAM = FATH79KY4N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "watch-v5-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = DiverDown;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Access to health data";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "this app records workout data";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For Navigation and Compass";
+				INFOPLIST_KEY_NSMotionUsageDescription = "This app uses motion data to track depth";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.jackskupien.watch-v5";
 				LD_RUNPATH_SEARCH_PATHS = (
