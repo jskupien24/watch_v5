@@ -4,7 +4,7 @@
 //
 //  Created by Faith Chernowski on 10/29/24.
 //
-// Further edited and built out by Jack Skupien on 03/31/25
+//  Edited and built out by Jack Skupien on 03/31/25
 
 import SwiftUI
 
@@ -237,26 +237,26 @@ struct TempView: View {
     }
 }
 
-////depth view
-//struct DepthView: View {
-//    private var depth="72"
-//    var body: some View {
-//        VStack {//depth
-//            Text("Depth")
-//                .font(.caption2)
-//                .foregroundColor(.accent)
-//            (
-//            Text(depth)
-//                .font(.title2)
-//                .bold()
-//            +
-//            Text(" ft")
-//                .font(.caption2)
-//                .bold()
-//            )
-//        }.padding(.vertical,1)
-//    }
-//}
+//depth view (DEPRECATED by DepthView2 below
+struct DepthView: View {
+    private var depth="72"
+    var body: some View {
+        VStack {//depth
+            Text("Depth")
+                .font(.caption2)
+                .foregroundColor(.accent)
+            (
+            Text(depth)
+                .font(.title2)
+                .bold()
+            +
+            Text(" ft")
+                .font(.caption2)
+                .bold()
+            )
+        }.padding(.vertical,1)
+    }
+}
 
 //depth view
 struct DepthView2: View {
