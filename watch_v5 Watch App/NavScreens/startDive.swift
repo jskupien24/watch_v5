@@ -20,17 +20,21 @@ struct StartDiveView: View {
             if showDiveView {
                 DiveContainerView().environmentObject(manager) // Show dive view after countdown
             } else {
-                VStack {
+                VStack(alignment: .center) {
                     if isCountingDown {
                         CountdownView(countdown: countdown, scaleEffect: scaleEffect, opacity: opacity)
                             .onAppear(perform: startCountdown)
                     } else {
-                        Text("Reef Dive #1")
-                            .font(.title2)
-                            .fontWeight(.thin)
-                            .padding(.bottom, 25)
-                            .padding(.leading, -30)
-
+                        HStack{
+                            Spacer()
+                            Text("Reef Dive #1")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .padding(.bottom, 25)
+//                                    .padding(.leading, -30)
+                            Spacer()
+                        }
+                        
                         Button(action: {
                             isCountingDown = true
                         }) {
@@ -105,6 +109,10 @@ struct CountdownView: View {
     }
 }
 
-#Preview {
-    StartDiveView().environmentObject(HealthManager())
+//#Preview {
+//    StartDiveView().environmentObject(HealthManager())
+//}
+
+#Preview{
+    ContentView().environmentObject(HealthManager())
 }

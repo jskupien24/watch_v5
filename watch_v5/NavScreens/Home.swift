@@ -14,7 +14,6 @@ struct HomeView: View {
                 Text("Home Content")//middle text
                     .font(.largeTitle)
                     .padding()
-                
                 Spacer()
             }
             .navigationTitle("Home")//top left text
@@ -22,3 +21,7 @@ struct HomeView: View {
     }
 }
 
+//preview (started from ContentView)
+#Preview {
+    ContentView()
+}

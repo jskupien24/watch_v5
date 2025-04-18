@@ -75,7 +75,7 @@ struct DiveSiteCard: View {
     let diveSite: DiveSite
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading) {//whole card
             TabView {
                 ForEach(diveSite.imageNames, id: \ .self) { imageName in
                     Image(imageName)
@@ -88,6 +88,7 @@ struct DiveSiteCard: View {
             .frame(height: 250)
             .tabViewStyle(PageTabViewStyle())
             
+            //info under pictures
             VStack(alignment: .leading, spacing: 8) {
                 Text(diveSite.name)
                     .font(.title2)
@@ -105,13 +106,22 @@ struct DiveSiteCard: View {
                 .font(.headline)
                 .foregroundColor(.blue)
                 
-                Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
-                    .font(.headline)
-                    .foregroundColor(.orange)
+//                Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
+//                    .font(.headline)
+//                    .foregroundColor(.orange)
+                StarsView(rating: diveSite.rating,
+                          maxRating: 5)
+                .padding(.leading, -70)
+//                .scaleEffect(0.75)
             }
             .padding()
         }
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color.white).shadow(radius: 5))
+        .background(
+            RoundedRectangle(
+                cornerRadius: 12
+            )
+            .fill(Color.appearance/*.opacity(0.75)*/)
+            .shadow(radius: 5))
         .padding(.bottom, 10)
     }
 }
@@ -146,9 +156,9 @@ struct DiveSiteDetailView: View {
                         .foregroundColor(.gray)
                     
                     HStack {
-                        Text("🌊 Depth: \(diveSite.depth, specifier: "%.0f")m")
-                        Text("🌡 Temp: \(diveSite.waterTemperature, specifier: "%.0f")°C")
-                        Text("🔭 Visibility: \(diveSite.visibility, specifier: "%.0f")m")
+                        Text("🌊 Depth:\n \(diveSite.depth, specifier: "%.0f")m")
+                        Text("🌡 Temp:\n \(diveSite.waterTemperature, specifier: "%.0f")°C")
+                        Text("🔭 Visibility:\n \(diveSite.visibility, specifier: "%.0f")m")
                     }
                     .font(.headline)
                     .foregroundColor(.blue)
@@ -208,9 +218,40 @@ struct DiveSiteFeedView: View {
     }
 }
 
-// MARK: - Preview
-struct DiscoveryView_Previews: PreviewProvider {
-    static var previews: some View {
-        DiveSiteFeedView()
+
+//MARK: - Rating Indicator
+struct StarsView: View {
+    var rating: CGFloat
+    var maxRating: Int
+
+    var body: some View {
+        HStack{
+            let stars = HStack(spacing: 0) {
+                ForEach(0..<maxRating, id: \.self) { _ in
+                    Image(systemName: "star.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
+            }
+            
+            stars.overlay(
+                GeometryReader { g in
+                    let width = rating / CGFloat(maxRating) * g.size.width
+                    ZStack(alignment: .leading) {
+                        Rectangle()
+                            .frame(width: width)
+                    }
+                }
+                    .mask(stars)
+            )
+            .foregroundColor(.reverseAppearance.opacity(0.15))
+            .scaleEffect(0.4)
+            Spacer()
+//            .padding(.trailing, 100)
+        }.frame(width: 250)
     }
+}
+// MARK: - Preview
+#Preview{
+    ContentView()
 }

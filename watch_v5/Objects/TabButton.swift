@@ -6,7 +6,7 @@
 //
 
 /////////////////////
-//DEPRECATED FILE ~Jack 2/3
+//DEPRECATED FILE (SEE NAVBAR.SWIFT FOR NEW TAB BUTTON STRUCT) ~Jack 2/3
 //////////////////
 
 
