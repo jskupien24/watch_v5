@@ -12,13 +12,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>370</string>
+					<string>1</string>
 					<key>StartingColumnNumber</key>
-					<string>2</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>369</string>
+					<string>1</string>
 					<key>Timestamp</key>
-					<string>766951444.483918</string>
+					<string>766951538.611423</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,17 +34,12 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>                }
-</string>
+				<string></string>
 				<key>leading</key>
-				<string>//                        .foregroundStyle(.reverseAppearance.opacity(0.7))
-////                        .offset(x: -(1.0-symbolScale))
-//</string>
-				<key>trailing</key>
-				<string>//                Text("\(temp)º")
-//                    .font(.system(size: 32, weight: .medium, design: .rounded))
-////                    .foregroundColor(.gray)
+				<string>
 </string>
+				<key>trailing</key>
+				<string></string>
 			</dict>
 			<key>type</key>
 			<string>bookmark</string>
