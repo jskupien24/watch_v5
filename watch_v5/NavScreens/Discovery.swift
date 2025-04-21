@@ -3,7 +3,8 @@
 //  watch_v5
 //
 //  Created by Faith Chernowski on 2/8/25.
-//
+//      and further edited by Jack Skupien on 04/3/25
+
 import SwiftUI
 import CoreLocation
 import MapKit
@@ -90,35 +91,45 @@ struct DiveSiteCard: View {
             
             //info under pictures
             VStack(alignment: .leading, spacing: 8) {
-                Text(diveSite.name)
-                    .font(.title2)
-                    .bold()
+                HStack(alignment: .center){
+                    //title
+                    Text(diveSite.name)
+                        .font(.title2)
+                        .bold()
+                    //star rating
+                    StarsView(rating: diveSite.rating,
+                              maxRating: 5)
+                    .scaleEffect(0.8)
+                    .padding(.leading,35)
+                    Spacer()
+                }
                 
                 Text(diveSite.description)
                     .font(.body)
                     .foregroundColor(.gray)
+                    .padding(.bottom,7)
                 
-                HStack {
-                    Text("🌊 Depth: \(diveSite.depth, specifier: "%.0f")m")
-                    Text("🌡 Temp: \(diveSite.waterTemperature, specifier: "%.0f")°C")
-                    Text("🔭 Visibility: \(diveSite.visibility, specifier: "%.0f")m")
-                }
-                .font(.headline)
-                .foregroundColor(.blue)
+//                HStack {
+//                    Text("Depth: \(diveSite.depth, specifier: "%.0f")m")
+//                    Text("Temp: \(diveSite.waterTemperature, specifier: "%.0f")°C")
+//                    Text("Visibility: \(diveSite.visibility, specifier: "%.0f")m")
+//                }
+//                .font(.headline)
+//                .foregroundColor(.blue)
 
                 //Conditions View
                 ConditionsView(
                     depth: Int(diveSite.depth),
                     temp: Int(diveSite.waterTemperature),
                     vis: Int(diveSite.visibility)
-                )
+                )//.scaleEffect(0.95)
                 
 //                Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
 //                    .font(.headline)
 //                    .foregroundColor(.orange)
-                StarsView(rating: diveSite.rating,
-                          maxRating: 5)
-                .padding(.leading, -70)
+//                StarsView(rating: diveSite.rating,
+//                          maxRating: 5)
+//                .padding(.leading, -70)
 //                .scaleEffect(0.75)
             }
             .padding()
@@ -152,30 +163,75 @@ struct DiveSiteDetailView: View {
                 .frame(height: 300)
                 .tabViewStyle(PageTabViewStyle())
                 
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(diveSite.name)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.black)
+//                VStack(alignment: .leading, spacing: 12) {
+//                    Text(diveSite.name)
+//                        .font(.largeTitle)
+//                        .fontWeight(.bold)
+//                        .foregroundColor(.black)
+//                    
+//                    Text(diveSite.description)
+//                        .font(.body)
+//                        .foregroundColor(.gray)
+//                    
+//                    HStack {
+//                        Text("🌊 Depth:\n \(diveSite.depth, specifier: "%.0f")m")
+//                        Text("🌡 Temp:\n \(diveSite.waterTemperature, specifier: "%.0f")°C")
+//                        Text("🔭 Visibility:\n \(diveSite.visibility, specifier: "%.0f")m")
+//                    }
+//                    .font(.headline)
+//                    .foregroundColor(.blue)
+//                    
+//                    Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
+//                        .font(.title2)
+//                        .foregroundColor(.orange)
+//                        .bold()
+//                }
+//                .padding()
+                
+                //info under pictures
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(alignment: .center){
+                        //title
+                        Text(diveSite.name)
+                            .font(.title)
+                            .bold()
+                        StarsView(rating: diveSite.rating,
+                                  maxRating: 5)
+                        .scaleEffect(0.8)
+                        .padding(.leading,35)
+    //                    .offset(x:-20)
+                        Spacer()
+                    }
                     
                     Text(diveSite.description)
                         .font(.body)
                         .foregroundColor(.gray)
+                        .padding(.bottom,15)
                     
-                    HStack {
-                        Text("🌊 Depth:\n \(diveSite.depth, specifier: "%.0f")m")
-                        Text("🌡 Temp:\n \(diveSite.waterTemperature, specifier: "%.0f")°C")
-                        Text("🔭 Visibility:\n \(diveSite.visibility, specifier: "%.0f")m")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.blue)
+    //                HStack {
+    //                    Text("Depth: \(diveSite.depth, specifier: "%.0f")m")
+    //                    Text("Temp: \(diveSite.waterTemperature, specifier: "%.0f")°C")
+    //                    Text("Visibility: \(diveSite.visibility, specifier: "%.0f")m")
+    //                }
+    //                .font(.headline)
+    //                .foregroundColor(.blue)
+
+                    //Conditions View
+                    ConditionsView(
+                        depth: Int(diveSite.depth),
+                        temp: Int(diveSite.waterTemperature),
+                        vis: Int(diveSite.visibility)
+                    )
                     
-                    Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
-                        .font(.title2)
-                        .foregroundColor(.orange)
-                        .bold()
+    //                Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
+    //                    .font(.headline)
+    //                    .foregroundColor(.orange)
+    //                StarsView(rating: diveSite.rating,
+    //                          maxRating: 5)
+    //                .padding(.leading, -70)
+    //                .scaleEffect(0.75)
                 }
-                .padding()
+                .padding(EdgeInsets(top: 0, leading: 12, bottom: 12, trailing: 0))
                 
                 Map(coordinateRegion: .constant(MKCoordinateRegion(
                     center: diveSite.coordinate,
@@ -233,11 +289,13 @@ struct StarsView: View {
 
     var body: some View {
         HStack{
-            let stars = HStack(spacing: 0) {
+            let stars = HStack(spacing: -2) {
                 ForEach(0..<maxRating, id: \.self) { _ in
                     Image(systemName: "star.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .padding(0)
+//                        .scaleEffect(0.4)
                 }
             }
             
@@ -252,29 +310,44 @@ struct StarsView: View {
                     .mask(stars)
             )
             .foregroundColor(.reverseAppearance.opacity(0.15))
-            .scaleEffect(0.4)
-            Spacer()
-//            .padding(.trailing, 100)
-        }.frame(width: 250)
+        }.frame(width:10)
     }
 }
 
 //MARK: - Conditions Stack (Depth, Temp, Vis)
 struct ConditionsView: View{
+    //values
     var depth: Int
     var temp: Int
     var vis: Int
-    let lineHeight=30.0
+    
+    //divider line dims
+    let lineHeight=35.0//30.0
     let lineWidth=1.0
+    
+    //symbols
+    let symbolScale=0.8//0.8
+    let symbolSpacing=0.0//5.0
+    
     var body: some View{
         HStack {
             Spacer()
             //Depth Stack
-            VStack(alignment:.center){
-                Text("Depth")
-                    .foregroundStyle(.reverseAppearance.opacity(0.7))
-                Text("\(depth, specifier: "%.0f")m")
+            VStack(alignment:.trailing){
+                HStack(alignment:.center,spacing:symbolSpacing){
+                    Text("Depth")
+                        .foregroundStyle(.reverseAppearance.opacity(0.7))
+                    Image(systemName:"water.waves.and.arrow.trianglehead.down")
+                        .scaleEffect(symbolScale)
+                        .foregroundStyle(.reverseAppearance.opacity(0.7))
+                }
+                Text("\(depth)")
                     .font(.system(size: 32, weight: .medium, design: .rounded))
+//                    .foregroundColor(.gray)
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                +
+                Text("m ")
+                    .font(.system(size: 25, weight: .medium, design: .rounded))
 //                    .foregroundColor(.gray)
                     .foregroundStyle(.reverseAppearance.opacity(0.7))
             }
@@ -287,10 +360,21 @@ struct ConditionsView: View{
             Spacer()
             //Temp Stack
             VStack(alignment:.center){
-                Text("Temp")
-                    .foregroundStyle(.reverseAppearance.opacity(0.7))
-                Text("\(temp, specifier: "%.0f")°C")
+                HStack(alignment:.center,spacing:symbolSpacing){
+                    Text("Temp")
+                        .foregroundStyle(.reverseAppearance.opacity(0.7))
+                    Image(systemName:"thermometer.and.liquid.waves")
+                        .scaleEffect(symbolScale)
+                        .foregroundStyle(.reverseAppearance.opacity(0.7))
+//                        .offset(x: -(1.0-symbolScale))
+                }
+                Text("\(temp)º")
                     .font(.system(size: 32, weight: .medium, design: .rounded))
+//                    .foregroundColor(.gray)
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                +
+                Text("C")
+                    .font(.system(size: 25, weight: .medium, design: .rounded))
 //                    .foregroundColor(.gray)
                     .foregroundStyle(.reverseAppearance.opacity(0.7))
             }
@@ -302,11 +386,21 @@ struct ConditionsView: View{
                 .opacity(0.5)
             Spacer()
             //Vis Stack
-            VStack(alignment:.center){
-                Text("Visibility")
-                    .foregroundStyle(.reverseAppearance.opacity(0.7))
-                Text("\(vis, specifier: "%.0f")m")
+            VStack(alignment:.leading){
+                HStack(alignment:.center,spacing:symbolSpacing-2){
+                    Text("Visibility")
+                        .foregroundStyle(.reverseAppearance.opacity(0.7))
+                    Image(systemName:"vision.pro")
+                        .scaleEffect(symbolScale)
+                        .foregroundStyle(.reverseAppearance.opacity(0.7))
+                }
+                Text(" \(vis)")
                     .font(.system(size: 32, weight: .medium, design: .rounded))
+//                    .foregroundColor(.gray)
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                +
+                Text("m")
+                    .font(.system(size: 25, weight: .medium, design: .rounded))
 //                    .foregroundColor(.gray)
                     .foregroundStyle(.reverseAppearance.opacity(0.7))
             }
