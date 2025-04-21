@@ -98,19 +98,12 @@ struct DiveSiteCard: View {
                     .font(.body)
                     .foregroundColor(.gray)
                 
-                HStack {
-                    Text("🌊 Depth: \(diveSite.depth, specifier: "%.0f")m")
-                    Text("🌡 Temp: \(diveSite.waterTemperature, specifier: "%.0f")°C")
-                    Text("🔭 Visibility: \(diveSite.visibility, specifier: "%.0f")m")
-                }
-                .font(.headline)
-                .foregroundColor(.blue)
 
                 //Conditions View
                 ConditionsView(
-                    depth: Int(diveSite.depth),
-                    temp: Int(diveSite.waterTemperature),
-                    vis: Int(diveSite.visibility)
+                    depth: Double(diveSite.depth),
+                    temp: Double(diveSite.waterTemperature),
+                    vis: Double(diveSite.visibility)
                 )
                 
 //                Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
@@ -162,13 +155,6 @@ struct DiveSiteDetailView: View {
                         .font(.body)
                         .foregroundColor(.gray)
                     
-                    HStack {
-                        Text("🌊 Depth:\n \(diveSite.depth, specifier: "%.0f")m")
-                        Text("🌡 Temp:\n \(diveSite.waterTemperature, specifier: "%.0f")°C")
-                        Text("🔭 Visibility:\n \(diveSite.visibility, specifier: "%.0f")m")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.blue)
                     
                     Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
                         .font(.title2)
@@ -261,9 +247,9 @@ struct StarsView: View {
 
 //MARK: - Conditions Stack (Depth, Temp, Vis)
 struct ConditionsView: View{
-    var depth: Int
-    var temp: Int
-    var vis: Int
+    var depth: Double
+    var temp: Double
+    var vis: Double
     let lineHeight=30.0
     let lineWidth=1.0
     var body: some View{
@@ -272,10 +258,14 @@ struct ConditionsView: View{
             //Depth Stack
             VStack(alignment:.center){
                 Text("Depth")
-                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                   // .foregroundStyle(.reverseAppearance.opacity(0.7))
+                    .font(.headline)
+                    .foregroundColor(.blue)
                 Text("\(depth, specifier: "%.0f")m")
                     .font(.system(size: 32, weight: .medium, design: .rounded))
 //                    .foregroundColor(.gray)
+                    .font(.headline)
+                    .foregroundColor(.blue)
                     .foregroundStyle(.reverseAppearance.opacity(0.7))
             }
             //splitter line
@@ -288,10 +278,14 @@ struct ConditionsView: View{
             //Temp Stack
             VStack(alignment:.center){
                 Text("Temp")
-                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                    .font(.headline)
+                    .foregroundColor(.blue)
+                    //.foregroundStyle(.reverseAppearance.opacity(0.7))
                 Text("\(temp, specifier: "%.0f")°C")
                     .font(.system(size: 32, weight: .medium, design: .rounded))
 //                    .foregroundColor(.gray)
+                    .font(.headline)
+                    .foregroundColor(.blue)
                     .foregroundStyle(.reverseAppearance.opacity(0.7))
             }
             //splitter line
@@ -304,10 +298,14 @@ struct ConditionsView: View{
             //Vis Stack
             VStack(alignment:.center){
                 Text("Visibility")
-                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                   //.foregroundStyle(.reverseAppearance.opacity(0.7))
+                    .font(.headline)
+                    .foregroundColor(.blue)
                 Text("\(vis, specifier: "%.0f")m")
                     .font(.system(size: 32, weight: .medium, design: .rounded))
 //                    .foregroundColor(.gray)
+                    .font(.headline)
+                    .foregroundColor(.blue)
                     .foregroundStyle(.reverseAppearance.opacity(0.7))
             }
             Spacer()
