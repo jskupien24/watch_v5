@@ -38,11 +38,20 @@ struct StartDiveView: View {
                         Button(action: {
                             isCountingDown = true
                         }) {
-                            Text("Start Dive")
-                                .padding()
-                                .foregroundColor(.white)
+//                            Label("   Start Dive",
+//                                  systemImage: "play.fill")
+//                            .foregroundStyle(.white.opacity(0.9))
+                            HStack{
+                                Image(systemName: "play.fill")
+                                    .offset(x: -10)
+                                    .foregroundStyle(.white.opacity(0.75))
+//                                    .padding(.leading,0)
+//                                Spacer()
+                                Text("Start Dive")
+                                    .foregroundStyle(.white.opacity(0.75))
+                            }
                         }
-                        .buttonStyle(.borderedProminent)
+                        .foregroundStyle(.blue)
                     }
                 }
             }
@@ -114,5 +123,5 @@ struct CountdownView: View {
 //}
 
 #Preview{
-    ContentView().environmentObject(HealthManager())
+    StartDiveView()
 }

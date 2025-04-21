@@ -198,7 +198,7 @@ struct HRView: View {
                     .symbolEffect(.pulse)
                     .padding(.leading,-10)
                 (
-                Text("\(Int(manager.heartRate))")
+                Text("\(Int(manager.heartRate))")//\(Int(manager.heartRate))
                     .font(.title2)
                     .bold()
                     .fontDesign(.rounded)
@@ -208,6 +208,7 @@ struct HRView: View {
 //                    .bold()
                 )
             }
+            .fixedSize(horizontal: true, vertical: false)
         }/*.padding(.vertical,3)*/
     }
 }
@@ -233,6 +234,7 @@ struct TempView: View {
                 .bold()
                 .fontDesign(.rounded)
             )
+            .fixedSize(horizontal: true, vertical: false)
         }
     }
 }

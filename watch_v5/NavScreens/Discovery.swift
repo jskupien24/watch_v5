@@ -105,6 +105,13 @@ struct DiveSiteCard: View {
                 }
                 .font(.headline)
                 .foregroundColor(.blue)
+
+                //Conditions View
+                ConditionsView(
+                    depth: Int(diveSite.depth),
+                    temp: Int(diveSite.waterTemperature),
+                    vis: Int(diveSite.visibility)
+                )
                 
 //                Text("⭐ \(diveSite.rating, specifier: "%.1f") / 5.0")
 //                    .font(.headline)
@@ -251,6 +258,63 @@ struct StarsView: View {
         }.frame(width: 250)
     }
 }
+
+//MARK: - Conditions Stack (Depth, Temp, Vis)
+struct ConditionsView: View{
+    var depth: Int
+    var temp: Int
+    var vis: Int
+    let lineHeight=30.0
+    let lineWidth=1.0
+    var body: some View{
+        HStack {
+            Spacer()
+            //Depth Stack
+            VStack(alignment:.center){
+                Text("Depth")
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                Text("\(depth, specifier: "%.0f")m")
+                    .font(.system(size: 32, weight: .medium, design: .rounded))
+//                    .foregroundColor(.gray)
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+            }
+            //splitter line
+            Spacer()
+            Rectangle()
+                .frame(width:lineWidth,height:lineHeight)
+                .foregroundStyle(.reverseAppearance)
+                .opacity(0.5)
+            Spacer()
+            //Temp Stack
+            VStack(alignment:.center){
+                Text("Temp")
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                Text("\(temp, specifier: "%.0f")°C")
+                    .font(.system(size: 32, weight: .medium, design: .rounded))
+//                    .foregroundColor(.gray)
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+            }
+            //splitter line
+            Spacer()
+            Rectangle()
+                .frame(width:lineWidth,height:lineHeight)
+                .foregroundStyle(.reverseAppearance)
+                .opacity(0.5)
+            Spacer()
+            //Vis Stack
+            VStack(alignment:.center){
+                Text("Visibility")
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+                Text("\(vis, specifier: "%.0f")m")
+                    .font(.system(size: 32, weight: .medium, design: .rounded))
+//                    .foregroundColor(.gray)
+                    .foregroundStyle(.reverseAppearance.opacity(0.7))
+            }
+            Spacer()
+        }
+    }
+}
+
 // MARK: - Preview
 #Preview{
     ContentView()
