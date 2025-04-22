@@ -27,7 +27,7 @@ struct StartDiveView: View {
                     } else {
                         HStack{
                             Spacer()
-                            Text("Reef Dive #1")
+                            Text("Great Barrier Reef Dive")
                                 .font(.title2)
                                 .fontWeight(.semibold)
                                 .padding(.bottom, 25)

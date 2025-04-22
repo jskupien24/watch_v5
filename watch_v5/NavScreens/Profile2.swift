@@ -42,12 +42,12 @@ struct ProfileView2: View {
                                         .overlay(Circle().stroke(Color.white, lineWidth: 2))
                                         .shadow(radius: 5)
                                     
-                                    Text("\(authViewModel.userData["name"] ?? "John Doe")")
+                                    Text("\(authViewModel.userData["name"] ?? "Jack")")
                                         .font(.title2)
                                         .foregroundColor(.white)
                                         .bold()
-                                    
-                                    Text("\(authViewModel.userData["bio"] ?? "Diver | Explorer | Ocean Enthusiast")")
+//                                                                        "\(authViewModel.userData["bio"] ??
+                                    Text("Diver | Explorer | Ocean Enthusiast")//")
                                         .font(.subheadline)
                                         .foregroundColor(.white.opacity(0.8))
                                 }

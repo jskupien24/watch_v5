@@ -259,6 +259,7 @@ struct DiveSiteFeedView: View {
                 Text("Nearby Dive Spots")
                     .font(.title)
                     .fontWeight(.bold)
+//                    .fontDesign(.rounded)
                     .padding()
                     .onAppear {
                         viewModel.fetchNearbyDiveSites()

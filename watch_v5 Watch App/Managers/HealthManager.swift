@@ -24,9 +24,10 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
         super.init()
         let hr=HKQuantityType(.heartRate)
         let workout=HKObjectType.workoutType()
+        let energy=HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
         //        let healthTypes: Set = [hr]
         let typesToShare: Set = [workout]
-        let typesToRead: Set = [hr, workout]
+        let typesToRead: Set = [hr,energy,workout]
         Task {
             do {
                 try await healthStore.requestAuthorization(toShare: typesToShare, read: typesToRead)
@@ -185,6 +186,18 @@ class HealthManager: NSObject, ObservableObject, HKWorkoutSessionDelegate, HKLiv
 
     func workoutBuilder(_ workoutBuilder: HKLiveWorkoutBuilder, didCollectDataOf collectedTypes: Set<HKSampleType>) {
         //logic to handle new data
+        for type in collectedTypes{
+            guard let quantityType=type as? HKQuantityType else {continue}
+            if quantityType==HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) {
+                let statistics = builder?.statistics(for: quantityType)
+                let energyUnit = HKUnit.kilocalorie()
+                if let calories = statistics?.sumQuantity()?.doubleValue(for: energyUnit) {
+                    DispatchQueue.main.async {
+                        print("calories burned so far: \(calories) kcal")
+                    }
+                }
+            }
+        }
     }
 
     func workoutBuilderDidCollectEvent(_ workoutBuilder: HKLiveWorkoutBuilder) {
