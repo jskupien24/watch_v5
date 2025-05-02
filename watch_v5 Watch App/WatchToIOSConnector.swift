@@ -4,53 +4,52 @@
 ////
 ////  Created by Fort Hunter on 4/2/25.
 ////
-//
+
 import Foundation
 import WatchConnectivity
+import SwiftUI
 
-class WatchToIOSConnector: NSObject, WCSessionDelegate, ObservableObject{
-    var session: WCSession
-    
-    init(session:WCSession = .default){
-        self.session = session
+class WatchToIOSConnector: NSObject, WCSessionDelegate, ObservableObject {
+    @Published var diveLocations: [String] = []
+
+    override init() {
         super.init()
+
         if WCSession.isSupported() {
+            let session = WCSession.default
             session.delegate = self
             session.activate()
+            print("Watch WCSession activated")
         } else {
             print("WCSession is not supported on this device.")
         }
     }
-    
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
-        
+
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        print("Watch session activated with state: \(activationState.rawValue)")
         if let error = error {
-            print("WCSession activation error: \(error.localizedDescription)")
-        } else {
-            print("WCSession activated with state: \(activationState.rawValue)")
-        }
-        
-        }
-    
-    
-    func sendDataToPhone(data: [String: Any]){
-        if WCSession.default.activationState != .activated {
-            print("WCSession is not activated yet.")
-            return
-        }
-        
-        if session.isReachable {
-            print("Sending Dive data")
-            
-            session.sendMessage(data, replyHandler: nil){ error in
-                print("error senind dive data")
-                print(error.localizedDescription)
-            }
-        }
-        else{
-            print("Session is not reachable")
+            print("Activation error: \(error.localizedDescription)")
         }
     }
 
-    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        print("Watch received message with replyHandler: \(message)")
+        if let locations = message["Dives"] as? [String] {
+            DispatchQueue.main.async {
+                self.diveLocations = locations
+            }
+            replyHandler(["status": "received"])
+        } else {
+            replyHandler(["status": "invalid message"])
+        }
+    }
+
+    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        print("Watch received message: \(message)")
+        if let locations = message["Dives"] as? [String] {
+            DispatchQueue.main.async {
+                self.diveLocations = locations
+            }
+        }
+    }
 }

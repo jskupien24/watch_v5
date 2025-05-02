@@ -12,39 +12,57 @@ import FirebaseDatabase
 import SwiftUI
 import MapKit
 
-
-
-class WatchConnector: NSObject, WCSessionDelegate, ObservableObject{
+class WatchConnector: NSObject, WCSessionDelegate, ObservableObject {
     var session: WCSession
     @StateObject private var authViewModel = AuthViewModel()
 
-    
-    init(session:WCSession = .default){
+    init(session: WCSession = .default) {
         self.session = session
         super.init()
         session.delegate = self
         session.activate()
-        print("init")
+        print("iOS WCSession initialized")
     }
-    
+
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        print("session")
+        print("iOS session activation completed with state: \(activationState.rawValue)")
     }
-    
+
     func sessionDidBecomeInactive(_ session: WCSession) {
-        print("became inactive")
+        print("iOS session became inactive")
     }
-    
+
     func sessionDidDeactivate(_ session: WCSession) {
-        print("Did deactivate")
+        print("iOS session did deactivate")
+        session.activate() // Good practice to re-activate if needed
     }
-    
-    func session(_ session: WCSession, didReceiveMessage message: [String: Any]){
+
+    // ✅ Message from watch WITHOUT reply handler
+    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        print("iOS received message: \(message)")
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard let entry = parseDiveLogEntry(id: uid , from: message) else { return}
+        guard let entry = parseDiveLogEntry(id: uid, from: message) else { return }
         authViewModel.saveDiveLogEntry(entry)
     }
-    
+
+    // ✅ Message from watch WITH reply handler (REQUIRED to silence error!)
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        print("iOS received message with replyHandler: \(message)")
+
+        guard let uid = Auth.auth().currentUser?.uid else {
+            replyHandler(["status": "no uid"])
+            return
+        }
+
+        guard let entry = parseDiveLogEntry(id: uid, from: message) else {
+            replyHandler(["status": "invalid entry"])
+            return
+        }
+
+        authViewModel.saveDiveLogEntry(entry)
+        replyHandler(["status": "saved"])
+    }
+
     func parseDiveLogEntry(id: String, from dict: [String: Any]) -> DiveLogEntry? {
         guard
             let date = dict["date"] as? String,
@@ -70,7 +88,6 @@ class WatchConnector: NSObject, WCSessionDelegate, ObservableObject{
                 return nil
             }
         }
-        
 
         return DiveLogEntry(
             id: UUID(),
@@ -85,5 +102,18 @@ class WatchConnector: NSObject, WCSessionDelegate, ObservableObject{
             heartRateData: heartRateData,
             coordinates: coordinates
         )
+    }
+
+    // 🔁 Optional: send message from iOS to Watch
+    func sendMessageToWatch(_ message: [String: Any]) {
+        if session.isReachable {
+            session.sendMessage(message, replyHandler: { reply in
+                print("Reply from watch: \(reply)")
+            }, errorHandler: { error in
+                print("Failed to send message to watch: \(error.localizedDescription)")
+            })
+        } else {
+            print("Watch session is not reachable")
+        }
     }
 }

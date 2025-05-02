@@ -55,6 +55,7 @@ enum DiveFormSection: Int, CaseIterable {
 struct NewDiveView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var dives: [Dive]
+    @StateObject private var watchConnector = WatchConnector()
     
     //BuhlmannCalculator stuff
     @StateObject private var calculator = BuhlmannCalculator()
@@ -531,11 +532,14 @@ struct DiveRow: View {
 struct MyDivesView: View {
     @State private var showingNewDiveSheet = false
     @State private var isEditing = false
+    @StateObject private var watchConnector = WatchConnector()
     @StateObject private var authViewModel = AuthViewModel()
     @State private var dives: [Dive] = []
     
     var body: some View {
+        
         NavigationView {
+            
             VStack {
                 if dives.isEmpty {
                     ContentUnavailableView(
@@ -552,19 +556,27 @@ struct MyDivesView: View {
                         .onDelete(perform: deleteDives)
                     }
                 }
+                
+                Button("Send to Watch"){
+                    let locations = dives.map { $0.location }
+                    let payload: [String: Any] = ["Dives": locations]
+                    watchConnector.sendMessageToWatch(payload)
+                    }
+                
             }
             .navigationTitle("My Dives")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
                 }
-                ToolbarItem(placement: .primaryAction) {
+                ToolbarItem() {
                     Button(action: {
                         showingNewDiveSheet = true
                     }) {
                         Label("Plan a New Dive", systemImage: "plus")
                     }
                 }
+
             }
             .sheet(isPresented: $showingNewDiveSheet) {
                 NewDiveView(dives: $dives)

@@ -7,6 +7,7 @@ import SwiftUI
 import WatchKit
 
 struct DiveContainerView: View {
+    let location: String
     @FocusState private var focusedIndex: Int?//for scrollable/tabbed screens
     @EnvironmentObject var manager: HealthManager//for heart rate
     
@@ -116,5 +117,5 @@ struct DiveContainerView: View {
 }
 
 #Preview {
-    DiveContainerView().environmentObject(HealthManager())
+    DiveContainerView(location:"Test Location").environmentObject(HealthManager())
 }
