@@ -40,25 +40,37 @@ struct StartDiveView: View {
                                 .foregroundColor(.gray)
                                 .padding()
                         } else {
-                            VStack(spacing: 10) {
+//                            VStack(spacing: 10) {
                                 ForEach(connector.diveLocations, id: \.self) { location in
+                                    HStack{
+                                        Spacer()
+                                        Text("\(location)")
+                                                                        .font(.title2)
+                                                                        .fontWeight(.semibold)
+                                                                        .padding(.bottom, 25)
+                                                                        .minimumScaleFactor(0.1)
+                                        //                                    .padding(.leading, -30)
+                                        Spacer()
+                                    }
                                     Button(action: {
                                         selectedLocation = location
                                         isCountingDown = true
                                     }) {
                                         HStack {
-                                            Image(systemName: "location.fill")
+                                            Image(systemName: "play.fill")
+                                                .offset(x: -10)
                                                 .foregroundColor(.white.opacity(0.75))
-                                            Text(location)
+                                            Text("Start Dive")
                                                 .foregroundColor(.white.opacity(0.75))
                                                 .font(.headline)
                                         }
                                         .frame(maxWidth: .infinity)
                                     }
-                                    .buttonStyle(.borderedProminent)
+//                                    .buttonStyle(.borderedProminent)
+                                    .foregroundStyle(.blue)
                                 }
-                            }
-                            .padding()
+//                            }
+//                            .padding()
                         }
                     }
                 }
