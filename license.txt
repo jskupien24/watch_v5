@@ -1,0 +1,29 @@
+Prosperity Public License 3.0.0
+
+Copyright © 2025 Diver Down Development Group
+
+Permission is hereby granted to any person obtaining a copy of this software
+and associated documentation files (the “Software”), to use, copy, modify,
+and distribute the Software for noncommercial purposes only, subject to the
+following conditions:
+
+1. Noncommercial Use Only. You may use, copy, modify, and distribute the
+Software and its modifications for noncommercial purposes only. Any commercial
+use of the Software or its modifications is strictly prohibited without a
+separate commercial license from the licensor.
+
+2. No Sublicensing. You may not sublicense the Software.
+
+3. Notices. You must include this license notice in all copies or substantial
+portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+For more information, please see the Prosperity Public License 3.0.0 at:
+https://polyformproject.org/licenses/prosperity/3.0.0/
