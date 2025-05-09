@@ -1,4 +1,5 @@
-![image](logo-4.png)
+<img src="logo-4.png" alt="Diver Down Logo" width="200"/>
+
 # Diver Down iOS and WatchOS Application
 #### Developed by:
 * Jack Skupien
