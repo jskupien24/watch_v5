@@ -1,4 +1,4 @@
-![image](logo.png)
+![image](logo-4.png)
 # Diver Down iOS and WatchOS Application
 #### Developed by:
 * Jack Skupien
